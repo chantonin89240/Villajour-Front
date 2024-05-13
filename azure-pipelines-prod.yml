@@ -17,14 +17,6 @@ steps:
   inputs:
     version: 8.0.x
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'SonarCloud'
-    organization: 'villajour'
-    scannerMode: 'MSBuild'
-    projectKey: 'Villajour'
-    projectName: 'Front-end'
-
 - task: DotNetCoreCLI@2
   displayName: Restore
   inputs:
@@ -37,14 +29,6 @@ steps:
     command: build
     projects: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
-
-- task: SonarCloudAnalyze@1
-  inputs:
-    jdkversion: 'JAVA_HOME_17_X64'
-
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
 
 - task: DotNetCoreCLI@2
   displayName: Test
