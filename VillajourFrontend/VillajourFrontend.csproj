@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Radzen.Blazor" Version="4.31.7" />
+    <PackageReference Include="System.Net.Http.Json" Version="9.0.0-preview.4.24266.19" />
+  </ItemGroup>
+
 </Project>

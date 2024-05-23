@@ -1,0 +1,62 @@
+﻿@page "/SlotAdjustmentForm"
+@inject DialogService DialogService
+@using Radzen
+@using Radzen.Blazor
+@inherits SlotAdjustmentFormBase
+
+<RadzenTemplateForm TItem="SlotAdjustmentModel" Data="@model" Submit="@(args => OnSubmit())">
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Début matin" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker TimeOnly="true" ShowTime="true" @bind-Value="model.MorningStart" Name="MorningStart" />
+            <RadzenRequiredValidator Text="requis" Component="MorningStart" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Fin matin" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker TimeOnly="true" ShowTime="true" @bind-Value="model.MorningEnd" Name="MorningEnd" />
+            <RadzenRequiredValidator Text="requis" Component="MorningEnd" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Début après-midi" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker TimeOnly="true" ShowTime="true" @bind-Value="model.AfternoonStart" Name="AfternoonStart" />
+            <RadzenRequiredValidator Text="requis" Component="AfternoonStart" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Fin après-midi" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker TimeOnly="true" ShowTime="true" @bind-Value="model.AfternoonEnd" Name="AfternoonEnd" />
+            <RadzenRequiredValidator Text="requis" Component="AfternoonEnd" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3"></div>
+        <div class="col">
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Enregistrer" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+
+<style>
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+</style>
