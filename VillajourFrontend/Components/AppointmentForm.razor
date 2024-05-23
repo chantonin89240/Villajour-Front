@@ -1,0 +1,73 @@
+﻿@page "/AppointmentForm"
+@inject DialogService DialogService
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Entity
+@inherits AppointmentFormBase
+
+<RadzenTemplateForm TItem="Appointment" Data="@model" Submit="@(args => OnSubmit())">
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Title" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@model.Title" Name="Title" />
+            <RadzenRequiredValidator Text="Title is required" Component="Title" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Description" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@model.Description" Name="Description" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Start" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker @bind-Value="@model.DateStart" Name="Start" ShowTime="true" />
+            <RadzenRequiredValidator Text="Start is required" Component="Start" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="End" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker Name="End" @bind-Value="@model.DateEnd" ShowTime="true" />
+            <RadzenRequiredValidator Component="End" Text="End is required" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3"></div>
+        <div class="col">
+            <div class="btn-group">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
+                @if (model.Id != "0" && !model.Validation)
+                {
+                    <RadzenButton Text="Valider" Click="@(args => ValidateAppointment())" class="btn-validate" />
+                    <RadzenButton Text="Refuser" Click="@(args => RefuseAppointment())" class="btn-refuse" />
+                }
+                @if (model.Validation)
+                {
+                    <RadzenButton Text="Annuler" Click="@(args => CancelAppointment())" class="btn-cancel" />
+                }
+            </div>
+        </div>
+    </div>
+</RadzenTemplateForm>
+
+<style>
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+</style>

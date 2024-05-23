@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Radzen;
 using VillajourFrontend.Components;
 
 namespace VillajourFrontend
@@ -7,19 +11,33 @@ namespace VillajourFrontend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            // Ajouter des services au conteneur.
+            builder.Services.AddRazorPages();
+            builder.Services.AddServerSideBlazor();
+            builder.Services.AddScoped<DialogService>();
+            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<TooltipService>();
+            builder.Services.AddScoped<ContextMenuService>();
+            builder.Services.AddHttpClient();
+            builder.Services.AddServerSideBlazor()
+                .AddCircuitOptions(options => { options.DetailedErrors = true; });
+            builder.Services.AddHttpClient();
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configurer le pipeline de requêtes HTTP.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            else
+            {
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();
