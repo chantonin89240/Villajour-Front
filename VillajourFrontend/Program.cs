@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radzen;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using VillajourFrontend.Components;
 
 namespace VillajourFrontend
@@ -17,7 +21,6 @@ namespace VillajourFrontend
 
             // Ajouter des services au conteneur.
             builder.Services.AddRazorPages();
-            builder.Services.AddServerSideBlazor();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();
             builder.Services.AddScoped<TooltipService>();
@@ -25,7 +28,32 @@ namespace VillajourFrontend
             builder.Services.AddHttpClient();
             builder.Services.AddServerSideBlazor()
                 .AddCircuitOptions(options => { options.DetailedErrors = true; });
-            builder.Services.AddHttpClient();
+            
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddCookie()
+            .AddOpenIdConnect(options =>
+            {
+                builder.Configuration.GetSection("OpenIDConnectSettings").Bind(options);
+
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.ResponseType = OpenIdConnectResponseType.Code;
+                
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "name"
+                };
+
+                if (builder.Environment.IsDevelopment())
+                {
+                    options.RequireHttpsMetadata = false;
+                }
+            });
 
             var app = builder.Build();
 
@@ -44,6 +72,9 @@ namespace VillajourFrontend
 
             app.UseStaticFiles();
             app.UseAntiforgery();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
