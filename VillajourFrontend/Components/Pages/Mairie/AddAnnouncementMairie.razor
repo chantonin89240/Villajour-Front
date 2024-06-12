@@ -1,5 +1,58 @@
 ﻿@page "/AddAnnouncementMairie"
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Entity
+@inject HttpClient HttpClient
+@inject DialogService DialogService
 
-<h3>AddAnnouncementMairie</h3>
+<RadzenTemplateForm TItem="Announcement" Data="@model" Submit="@OnSubmit">
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Title" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@model.Title" Name="Title" Style="width:100%" />
+            <RadzenRequiredValidator Text="Title is required" Component="Title" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Description" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@model.Description" Name="Description" Style="width:100%" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            <RadzenLabel Text="Date" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker @bind-Value="@model.Date" Name="Date" ShowTime="false" />
+            <RadzenRequiredValidator Text="Date is required" Component="Date" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3"></div>
+        <div class="col">
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
+        </div>
+    </div>
+</RadzenTemplateForm>
 
+@code {
+    Announcement model = new Announcement();
 
+    private async Task OnSubmit()
+    {
+        var response = await HttpClient.PostAsJsonAsync("https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Announcement", model);
+        if (response.IsSuccessStatusCode)
+        {
+            DialogService.Close(model);
+        }
+        else
+        {
+            Console.WriteLine("Failed to save the announcement.");
+        }
+    }
+}

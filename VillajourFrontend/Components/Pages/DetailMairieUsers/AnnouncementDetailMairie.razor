@@ -1,4 +1,78 @@
-﻿@page "/AnnouncementDetailMairie"
+﻿@page "/AnnouncementDetailMairie/{Id:int}"
+@inject HttpClient HttpClient
+@inject DialogService DialogService
+@using VillajourFrontend.Entity
+@using Radzen
+@using Radzen.Blazor
 
-<h3>AnnouncementDetailMairie</h3>
+@code {
+    [Parameter]
+    public Announcement Announcement { get; set; }
+    bool isMairie = false; 
 
+    protected void OnSubmit()
+    {
+        DialogService.Close(Announcement);
+    }
+}
+
+@if (Announcement != null)
+{
+    if (isMairie == true)
+    {
+        
+    <RadzenTemplateForm TItem="Announcement" Data="@Announcement" Submit="@(args => OnSubmit())">
+        <div class="row form-group">
+            <div class="col-md-3">
+                <RadzenLabel Text="Title" />
+            </div>
+            <div class="col-md-9">
+                <RadzenTextBox @bind-Value="@Announcement.Title" ReadOnly="!isMairie" Style="width:100%" />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-3">
+                <RadzenLabel Text="Description" />
+            </div>
+            <div class="col-md-9">
+                <RadzenTextBox @bind-Value="@Announcement.Description" ReadOnly="!isMairie" Style="width:100%" />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-3">
+                <RadzenLabel Text="Date" />
+            </div>
+            <div class="col-md-9">
+                <RadzenDatePicker @bind-Value="@Announcement.Date" Disabled="!isMairie" />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12 text-right">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Enregistrer" Visible="isMairie" />
+            </div>
+        </div>
+    </RadzenTemplateForm>
+    }
+    else
+    {
+           <div class="row form-group">
+                <RadzenLabel Text="@Announcement.Title" />
+                <RadzenLabel Text="@Announcement.Description" />
+                <RadzenLabel Text="@Announcement.Date.ToShortDateString()" />
+            </div>
+    }
+}
+else
+{
+    <p>Announcement not found.</p>
+}
+
+<style>
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+</style>
