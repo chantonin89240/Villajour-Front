@@ -1,5 +1,52 @@
 ﻿@page "/AnnouncementUser"
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@inherits ComponentBase
+@using VillajourFrontend.Entity
+@using Radzen
+@using Radzen.Blazor
 
-<h3>AnnouncementUser</h3>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Favoris</h3>
+            <RadzenDataList  Data="@userFavorites" TItem="Announcement" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+                <Template Context="announcement">
+                    <div class="row mb-3">
+                        <div class="col-md-9">
+                            <h4>@announcement.Title</h4>
+                            <p>@announcement.Description</p>
+                            <p><em>@announcement.Date.ToShortDateString()</em></p>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <RadzenButton Icon="info" Text="Voir détails" Click="@(() => ViewDetails(announcement.Id))" />
+                        </div>
+                    </div>
 
 
+                </Template>
+            </RadzenDataList>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Annonces des Mairies</h3>
+            <RadzenDataList Data="@mairieAnnouncements" TItem="Announcement" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+                <Template Context="announcement">
+                    <div class="row mb-3">
+                        <div class="col-md-9">
+                            <h4>@announcement.Title</h4>
+                            <p>@announcement.Description</p>
+                            <p><em>@announcement.Date.ToShortDateString()</em></p>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <RadzenButton Icon="info" Text="Voir détails" Click="@(() => ViewDetails(announcement.Id))" />
+                        </div>
+                    </div>
+                    <hr />
+                </Template>
+            </RadzenDataList>
+        </div>
+    </div>
+</div>
