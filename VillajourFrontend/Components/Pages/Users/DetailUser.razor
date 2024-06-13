@@ -1,5 +1,81 @@
 ﻿@page "/DetailUser"
 
-<h3>DetailUser</h3>
+<RadzenPanel>
+    <HeaderTemplate>
+        <div>
+            <h3>Profil utilisateur</h3>
+        </div>
+        <div>
+            <RadzenImage class="profil-picture" src=@model.Picture alt="Photo de Profil" />
+        </div>
+    </HeaderTemplate>
+    <ChildContent>
+        <RadzenTemplateForm Style="margin-top:5%;" TItem=Entity.User Data=@model Submit="@(args => ModifyUser(model))">
+            <div style="width:80%">
+                <div class="ligne">
+                    <RadzenText class="details-title">Nom : </RadzenText>
+                    <RadzenTextBox Disabled="@NotModificationMode" class="details-data" Value="DELARUE"></RadzenTextBox>
+                </div>
+                <div class="ligne">
+                    <RadzenText class="details-title">Numéro de téléphone : </RadzenText>
+                    <RadzenTextBox Disabled="@NotModificationMode" class="details-data" @bind-value="@model.Phone"></RadzenTextBox>
+                </div>
+            </div>
 
+            <div class="ligne">
+                @if (NotModificationMode)
+                {
+                    <RadzenButton Click="@(args => EnterModificationMode())" class="buttons rz-background-color-success">Modifier</RadzenButton>
+                }
+                @if (NotModificationMode == false)
+                {
+                    <RadzenButton ButtonType="ButtonType.Submit" class="buttons rz-background-color-success">Valider les modifications</RadzenButton>
+                    <RadzenButton Click="@(args => ExitModificationMode())" class="buttons rz-background-color-base-600">Annuler</RadzenButton>
+                }
+                <RadzenButton Click="@(args => LoadPopup())" class="button-supprimer rz-background-color-danger">Supprimer mon compte</RadzenButton>
+            </div>
+        </RadzenTemplateForm>
+    </ChildContent>
+</RadzenPanel>
 
+<style>
+    .buttons {
+        width: 15%;
+        height: 15%;
+        margin-top: 2%;
+        margin-right: 2%;
+    }
+
+    .button-supprimer {
+        width: 15%;
+        height: 15%;
+        margin-top: 2%;
+        margin-right: 0%;
+        margin-left: auto;
+    }
+
+    .ligne {
+        display: flex;
+        align-items: center;
+    }
+
+    .details-title {
+        margin: 1%;
+        margin-left: 5%;
+    }
+
+    .details-data {
+        margin: 1%;
+        margin-left: auto;
+        margin-right: 30%;
+        width: 40%;
+    }
+
+    .profil-picture {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ccc;
+    }
+</style>

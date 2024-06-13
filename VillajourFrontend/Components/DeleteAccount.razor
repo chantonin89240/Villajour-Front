@@ -1,0 +1,49 @@
+﻿@page "/DeleteAccount"
+@inject DialogService DialogService
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Entity
+
+<RadzenPanel>
+    @if (Confirmed == false)
+    {
+        <RadzenText>Pour des raisons de sécurité, nous conservons votre compte 30 jours après suppression. Durant cette périodre, vous pourrez annuler la suppression.</RadzenText>
+    }
+    @if (Confirmed == true)
+    {
+        <RadzenText>Votre compte a déjà été supprimé, vous pouvez encore annuler la suppression.</RadzenText>
+    }
+    <div class="ligne">
+        @if (Confirmed == false)
+        {
+            <RadzenButton Text="Supprimer mon compte" Click="@(args => Confirmer())" class="button-confirmer rz-background-color-danger"></RadzenButton>
+        }
+        @if (Confirmed)
+        {
+            <RadzenButton Text="Retrouver mon compte" Click="@(args => Confirmer())" class="button-confirmer rz-background-color-danger"></RadzenButton>
+        }
+        <RadzenButton Text="Annuler" Click="@(args => Annuler())" class="button-annuler rz-background-color-base-600"></RadzenButton>
+    </div>
+</RadzenPanel>
+
+<style>
+    .ligne {
+        display: flex;
+        align-items: center;
+    }
+
+    .button-annuler {
+        width: 40%;
+        height: 15%;
+        margin-top: 2%;
+        margin-right: 2%;
+        margin-left: auto;
+    }
+
+    .button-confirmer {
+        width: 40%;
+        height: 15%;
+        margin-top: 2%;
+        margin-right: auto;
+    }
+</style>
