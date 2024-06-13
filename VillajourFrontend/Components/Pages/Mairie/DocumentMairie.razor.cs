@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Radzen;
 using VillajourFrontend.Dto;
 using VillajourFrontend.Entity;
@@ -86,22 +87,11 @@ public partial class DocumentMairie
         }
     }
 
-   
-
     // download du document
     protected async Task OnDownloadDocument(string url)
     {
-        using var httpClient = new HttpClient();
-        var response = await httpClient.GetAsync(url);
-        if (response.IsSuccessStatusCode)
-        {
-
-        }
-        else
-        {
-            // Gérer l'erreur
-            Console.WriteLine($"Erreur lors du téléchargement du document : {response.StatusCode}");
-        }
+        var apiUrl = $"https://localhost:7205/Api/Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
+        NavigationManager.NavigateTo(apiUrl, true);
     }
 
 }
