@@ -1,0 +1,38 @@
+﻿<!-- Pages/AddDocumentMairie.razor -->
+@page "/AddDocumentMairie"
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Dto
+
+<RadzenTemplateForm TItem="AddDocumentDto" Data="@newDocument" Submit="@HandleValidSubmit">
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4 product-title">
+            <RadzenTextBox @bind-Value="@newDocument.Title" Label="Titre" Placeholder="Titre du document" Required="true" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
+            <RadzenDropDown @bind-Value=@newDocument.DocumentTypeId TValue="int" Data=@documentTypeList TextProperty="Libelle" ValueProperty="Id" Required="true" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4">
+            <RadzenTextArea @bind-Value="@newDocument.Description" Label="Description" Placeholder="Description du document" Rows="4" class="addDescription" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4">
+            <RadzenCard>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Single file upload</RadzenText>
+                <RadzenUpload Required="true" Change="@(args => OnClientChange( args))" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})">
+                </RadzenUpload>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4">
+            <RadzenButton Text="Ajouter" Type="submit" ButtonStyle="ButtonStyle.Primary" />
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenTemplateForm>

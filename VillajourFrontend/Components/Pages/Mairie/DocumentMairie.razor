@@ -1,5 +1,57 @@
-﻿@page "/DocumentMairie"
+﻿<!-- Pages/DocumentMairie.razor -->
+@page "/DocumentMairie"
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Entity
+@using VillajourFrontend.Dto
 
-<h3>DocumentMairie</h3>
+<div class="documentTitle">
+    <h1>Vos documents</h1>
+    <RadzenButton Text="Ajouter un document" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Click="@OnAddNewDocument" />
+</div>
 
+@if (documents == null)
+{
+    <p>Aucun document trouvé !</p>
+}
+else if (!documents.Any())
+{
+    <p>Vous n'avez aucun document.</p>
+}
+else
+{
+    <RadzenDataList Style="height:500px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@documents" TItem="DocumentDto" PageSize="3" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+        <Template Context="Document">
+            <RadzenCard Style="width: 100%; padding: 0;">
+                <RadzenRow Gap="0">
+                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(Document.Title)</RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
+                        <RadzenRow Gap="0">
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(Document.Date)</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type de document</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(Document.DocumentType.Libelle)</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="12" SizeLG="6">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Description</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(Document.Description)</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">
+                        <RadzenButton Text="Télécharger" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%" class="rz-background-color-success-light" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">
+                        <RadzenButton Text="Supprimer" Click="@(() => OnDeleteDocument(Document.Id))" Style="width: 100%" class="rz-background-color-danger-light" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
+        </Template>
+    </RadzenDataList>
+}
 
