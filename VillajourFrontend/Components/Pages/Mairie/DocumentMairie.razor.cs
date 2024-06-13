@@ -1,6 +1,107 @@
-﻿namespace VillajourFrontend.Components.Pages.Mairie
+﻿using Microsoft.AspNetCore.Components;
+using Radzen;
+using VillajourFrontend.Dto;
+using VillajourFrontend.Entity;
+
+namespace VillajourFrontend.Components.Pages.Mairie;
+
+public partial class DocumentMairie
 {
-    public partial class DocumentMairie
+    [Inject]
+    protected HttpClient? HttpClient { get; set; }
+
+    [Inject]
+    protected DialogService? DialogService { get; set; }
+
+    [Inject]
+    protected NavigationManager? NavigationManager { get; set; }
+
+    [Inject] private NotificationService? NotificationService { get; set; }
+
+
+    protected List<DocumentDto> documents = new List<DocumentDto>();
+
+    protected override async Task OnInitializedAsync()
     {
+        await LoadDocuments();
     }
+
+    protected async Task LoadDocuments()
+    {
+        var apiUrl = "https://localhost:7205/Api/Document/GetDocumentHistoByMairie/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        try
+        {
+            var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentDto>>(apiUrl);
+            documents = documentMairie?.ToList() ?? new List<DocumentDto>();
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur lors du chargement des documents : {ex.Message}");
+        }
+    }
+
+    // redirige vers la page d'ajout de document
+    private async void OnAddNewDocument()
+    {
+        var newDocument = new Document();
+        var result = await DialogService.OpenAsync<AddDocumentMairie>("Ajouter un document");
+
+        if (result != null && result)
+        {
+            await LoadDocuments();
+            NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été ajouté", Duration = 10000 };
+            NotificationService.Notify(message);
+        }
+    }
+
+    // suppression d'un document
+    protected async Task OnDeleteDocument(int id)
+    {
+        var apiUrl = "https://localhost:7205/Api/Document/" + id;
+        try
+        {
+            var validation = await HttpClient.DeleteAsync(apiUrl);
+
+            if (validation.IsSuccessStatusCode)
+            {
+                await LoadDocuments();
+
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé", Duration = 10000 };
+                NotificationService.Notify(message);
+            }
+            else
+            {
+                await LoadDocuments();
+
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été supprimé", Duration = 10000 };
+                NotificationService.Notify(message);
+
+                
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur lors du chargement des documents : {ex.Message}");
+        }
+    }
+
+   
+
+    // download du document
+    protected async Task OnDownloadDocument(string url)
+    {
+        using var httpClient = new HttpClient();
+        var response = await httpClient.GetAsync(url);
+        if (response.IsSuccessStatusCode)
+        {
+
+        }
+        else
+        {
+            // Gérer l'erreur
+            Console.WriteLine($"Erreur lors du téléchargement du document : {response.StatusCode}");
+        }
+    }
+
 }
