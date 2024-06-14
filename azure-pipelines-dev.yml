@@ -5,38 +5,109 @@
 
 trigger:
 - dev
-
 variables:
   solution: '*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  dockerRegistryServiceConnection: '<SERVICE_CONNECTION_NAME>'
+  imageRepository: '<IMAGE_NAME>'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  
+pool:
+ vmImage: 'windows-latest'
+jobs:
 
-steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk 8.0.x'
-  inputs:
-    version: 8.0.x
+# Build job and scan
 
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: restore
-    projects: '**/*.csproj'
-
-- task: DotNetCoreCLI@2
+- job: build
   displayName: Build
-  inputs:
-    command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: test
-    projects: '**/*.UnitTest.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk 8.0.x'
+    inputs:
+      version: 8.0.x
 
-- task: QodanaScan@2024
-  env:
-    QODANA_TOKEN: $(QODANA_TOKEN)
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: '**/*.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: '**/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: test
+      projects: '**/*.UnitTest.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+ 
+- job: scan
+  displayName: Scan
+  dependsOn: build
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - task: QodanaScan@2024
+    env:
+      QODANA_TOKEN: $(QODANA_TOKEN)
+
+- job: deploy
+  displayName: Publish
+  dependsOn: scan
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'Frontend_$(Build.BuildNumber)'
+      publishLocation: 'Container'
+    condition: succeededOrFailed()
+
+  - task: AzureAppServiceSettings@1
+    inputs:
+      azureSubscription: 'Dev/test 1 (2024.villAjour.1)(65d451fe-e9a7-4469-a24f-173719f9769d)'
+      appName: 'frontdevvillajour'
+      resourceGroupName: 'villajour'
+      appSettings: |
+        [
+          {
+          "name": "OpenIDConnectSettings__Authority",
+          "value": "https://keycloak.villajour.fr:8443/realms/Villajour/",
+          "slotSetting": false
+          },
+          {
+          "name": "OpenIDConnectSettings__ClientId",
+          "value": "dev-villajour-front-end",
+          "slotSetting": false
+          },
+          {
+          "name": "OpenIDConnectSettings__ClientSecret",
+          "value": "$(OPENIDCONNECT:CLIENTSECRET)",
+          "slotSetting": false
+          }
+        ]
+
+  - task: AzureRmWebAppDeployment@4
+    inputs:
+      ConnectionType: 'AzureRM'
+      azureSubscription: 'Dev/test 1 (2024.villAjour.1)(65d451fe-e9a7-4469-a24f-173719f9769d)'
+      appType: 'webApp'
+      WebAppName: 'frontdevvillajour'
+      packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+      enableCustomDeployment: true
+      DeploymentType: 'webDeploy'
+      TakeAppOfflineFlag: false
