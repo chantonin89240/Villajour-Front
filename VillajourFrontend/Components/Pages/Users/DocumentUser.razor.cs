@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using System.Text.Json;
 using System.Text;
-using VillajourFrontend.Components.Pages.Mairie;
+using System.Text.Json;
 using VillajourFrontend.Dto;
-using VillajourFrontend.Entity;
 
 namespace VillajourFrontend.Components.Pages.Users;
 
@@ -22,20 +20,36 @@ public partial class DocumentUser
     [Inject] private NotificationService? NotificationService { get; set; }
 
     protected List<DocumentDto> documentsFav = new List<DocumentDto>();
-    protected List<DocumentDto> documentsByMairieFav = new List<DocumentDto>();
+    protected List<DocumentByMairieFavoriteDto> documentsByMairieFav = new List<DocumentByMairieFavoriteDto>();
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadDocuments();
+        await LoadDocumentsFav();
+        await LoadDocumentsFavMairie();
     }
 
-    protected async Task LoadDocuments()
+    protected async Task LoadDocumentsFav()
     {
         var apiUrl = "https://localhost:7205/Api/Document/GetDocumentFav/3fa85f64-5717-4562-b3fc-2c963f66afa6";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentDto>>(apiUrl);
             documentsFav = documentMairie?.ToList() ?? new List<DocumentDto>();
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur lors du chargement des documents : {ex.Message}");
+        }
+    }
+
+    protected async Task LoadDocumentsFavMairie()
+    {
+        var apiUrl = "https://localhost:7205/Api/Document/GetDocumentByMairieFavorite/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        try
+        {
+            var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentByMairieFavoriteDto>>(apiUrl);
+            documentsByMairieFav = documentMairie?.ToList() ?? new List<DocumentByMairieFavoriteDto>();
             this.StateHasChanged();
         }
         catch (Exception ex)
@@ -74,14 +88,16 @@ public partial class DocumentUser
 
             if (response.IsSuccessStatusCode)
             {
-                await LoadDocuments();
+                await LoadDocumentsFav();
+                await LoadDocumentsFavMairie();
 
                 NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé de vos favoris", Duration = 10000 };
                 NotificationService.Notify(message);
             }
             else
             {
-                await LoadDocuments();
+                await LoadDocumentsFav();
+                await LoadDocumentsFavMairie();
 
                 NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été supprimé", Duration = 10000 };
                 NotificationService.Notify(message);
