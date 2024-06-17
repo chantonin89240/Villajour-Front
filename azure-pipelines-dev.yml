@@ -79,7 +79,7 @@ jobs:
 
   - task: AzureAppServiceSettings@1
     inputs:
-      azureSubscription: 'Dev/test 1 (2024.villAjour.1)(65d451fe-e9a7-4469-a24f-173719f9769d)'
+      azureSubscription: 'Dev/test 2 (2024.DI3.P3 G1.1)(5b7cf519-ec0c-474a-98f8-d77c061ef50f)'
       appName: 'frontdevvillajour'
       resourceGroupName: 'villajour'
       appSettings: |
@@ -104,7 +104,7 @@ jobs:
   - task: AzureRmWebAppDeployment@4
     inputs:
       ConnectionType: 'AzureRM'
-      azureSubscription: 'Dev/test 1 (2024.villAjour.1)(65d451fe-e9a7-4469-a24f-173719f9769d)'
+      azureSubscription: 'Dev/test 2 (2024.DI3.P3 G1.1)(5b7cf519-ec0c-474a-98f8-d77c061ef50f)'
       appType: 'webApp'
       WebAppName: 'frontdevvillajour'
       packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
