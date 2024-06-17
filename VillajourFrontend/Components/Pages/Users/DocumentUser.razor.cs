@@ -76,7 +76,7 @@ public partial class DocumentUser
             {
                 await LoadDocuments();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé de vos favoris", Duration = 10000 };
                 NotificationService.Notify(message);
             }
             else
