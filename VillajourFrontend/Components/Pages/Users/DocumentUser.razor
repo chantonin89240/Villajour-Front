@@ -68,7 +68,7 @@ else if (!documentsByMairieFav.Any())
 }
 else
 {
-    <RadzenDataList Style="height:300px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@documentsByMairieFav" TItem="DocumentByMairieFavoriteDto" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+    <RadzenDataList Style="height:400px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@documentsByMairieFav" TItem="DocumentByMairieFavoriteDto" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
         <Template Context="Document">
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
@@ -78,8 +78,8 @@ else
                     <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
                         <RadzenRow Gap="0">
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(Document.Date)</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Appartient à </RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(Document.Mairie.Name)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type de document</RadzenText>
@@ -94,9 +94,18 @@ else
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                         <RadzenButton Text="Télécharger" title="Télécharger le document" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%" class="rz-background-color-success-light" />
                     </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                        <RadzenButton Click="@(() => OnDeleteDocumentFav(Document.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
-                    </RadzenColumn>
+                    @if (Document.Favorite)
+                    {
+                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenButton Click="@(() => OnDeleteDocumentFav(Document.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                        </RadzenColumn>
+                    }
+                    else
+                    {
+                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenButton Click="@(() => OnAddDocumentFav(Document.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
+                        </RadzenColumn>
+                    }
                 </RadzenRow>
             </RadzenCard>
         </Template>

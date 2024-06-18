@@ -65,11 +65,57 @@ public partial class DocumentUser
         NavigationManager.NavigateTo(apiUrl, true);
     }
 
+    // Ajout d'un document favoris
+    protected async Task OnAddDocumentFav(int idDocument)
+    {
+        var apiUrl = "https://localhost:7205/Api/User/AddFavoriteContent/";
+        FavoriteContentDto addFav = new FavoriteContentDto()
+        {
+            UserId = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6"),
+            AnnouncementId = null,
+            EventId = null,
+            DocumentId = idDocument
+        };
+
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, apiUrl)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(addFav), Encoding.UTF8, "application/json")
+            };
+
+            var response = await HttpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadDocumentsFav();
+                await LoadDocumentsFavMairie();
+
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été ajouté à vos favoris", Duration = 10000 };
+                NotificationService.Notify(message);
+            }
+            else
+            {
+                await LoadDocumentsFav();
+                await LoadDocumentsFavMairie();
+
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été ajouté", Duration = 10000 };
+                NotificationService.Notify(message);
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur lors du chargement des documents : {ex.Message}");
+        }
+    }
+
     // suppression d'un document favoris
     protected async Task OnDeleteDocumentFav(int idDocument)
     {
         var apiUrl = "https://localhost:7205/Api/User/DeleteFavoriteContent/";
-        DeleteFavoriteContentDto deleteFav = new DeleteFavoriteContentDto()
+        FavoriteContentDto deleteFav = new FavoriteContentDto()
         {
             UserId = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6"),
             AnnouncementId = null,
@@ -110,8 +156,4 @@ public partial class DocumentUser
             Console.WriteLine($"Erreur lors du chargement des documents : {ex.Message}");
         }
     }
-
-    
-
-
 }
