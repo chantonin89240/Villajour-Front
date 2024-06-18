@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using Radzen;
 using VillajourFrontend.Dto;
 using VillajourFrontend.Entity;
