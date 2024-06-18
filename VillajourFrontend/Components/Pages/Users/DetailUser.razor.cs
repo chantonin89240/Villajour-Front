@@ -32,8 +32,8 @@ namespace VillajourFrontend.Components.Pages.Users
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadUser();
             NotModificationMode = true;
+            await LoadUser();
         }
 
         protected async Task LoadUser()
