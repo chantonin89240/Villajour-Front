@@ -33,8 +33,8 @@ namespace VillajourFrontend.Components.Pages.Mairie
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadMairie();
             NotModificationMode = true;
+            await LoadMairie();
         }
 
         protected async Task LoadMairie()
