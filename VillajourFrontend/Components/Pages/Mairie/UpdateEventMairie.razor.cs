@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
-using System.Reflection;
 using VillajourFrontend.Dto.Event;
 using VillajourFrontend.Entity;
 
 namespace VillajourFrontend.Components.Pages.Mairie;
 
-public partial class AddEventMairie : ComponentBase
+public partial class UpdateEventMairie : ComponentBase
 {
     [Inject]
     protected HttpClient? HttpClient { get; set; }
@@ -18,9 +16,10 @@ public partial class AddEventMairie : ComponentBase
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
-    protected List<EventType> eventTypeList = new List<EventType>();
+    [Parameter]
+    public EventDto? Event { get; set; }
 
-    protected AddEventDto newEvent = new AddEventDto();
+    protected List<EventType> eventTypeList = new List<EventType>();
 
     protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
@@ -45,24 +44,36 @@ public partial class AddEventMairie : ComponentBase
 
     protected async Task HandleValidSubmit()
     {
-        var apiUrl = "https://localhost:7205/Api/Event";
+        var apiUrl = "https://localhost:7205/Api/Event/" + Event.Id;
         try
         {
-            newEvent.MairieId = MairieGuid;
-            var response = await HttpClient.PostAsJsonAsync(apiUrl, newEvent);
+            Event updateEvent = new Event()
+            {
+                Id = Event.Id,
+                StartTime = Event.StartTime,
+                EndTime = Event.EndTime,
+                Address = Event.Address,
+                Description = Event.Description,
+                Title = Event.Title,
+                EventTypeId = Event.EventType.Id,
+                MairieId = MairieGuid
+            };
+
+            var response = await HttpClient.PutAsJsonAsync(apiUrl, updateEvent);
             if (response.IsSuccessStatusCode)
             {
                 DialogService.Close(true);
             }
             else
             {
-                Console.WriteLine($"Erreur lors de l'ajout de l'événement: {response.StatusCode}");
+                Console.WriteLine($"Erreur lors de la modification de l'événement: {response.StatusCode}");
             }
         }
         catch (Exception ex)
         {
             // Gestion des erreurs du client
-            Console.WriteLine($"Erreur lors de l'ajout de l'événement : {ex.Message}");
+            Console.WriteLine($"Erreur lors de la modification de l'événement : {ex.Message}");
         }
     }
+
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 
-namespace VillajourFrontend.Dto;
+namespace VillajourFrontend.Dto.Document;
 
 public class AddDocumentDto
 {

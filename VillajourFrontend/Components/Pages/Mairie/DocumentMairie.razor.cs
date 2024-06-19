@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using VillajourFrontend.Dto;
+using VillajourFrontend.Dto.Document;
 using VillajourFrontend.Entity;
 
 namespace VillajourFrontend.Components.Pages.Mairie;
@@ -21,6 +21,9 @@ public partial class DocumentMairie
 
     protected List<DocumentDto> documents = new List<DocumentDto>();
 
+    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    protected Guid mairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+
     protected override async Task OnInitializedAsync()
     {
         await LoadDocuments();
@@ -28,7 +31,7 @@ public partial class DocumentMairie
 
     protected async Task LoadDocuments()
     {
-        var apiUrl = "Document/GetDocumentHistoByMairie/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        var apiUrl = $"Document/GetDocumentHistoByMairie/{mairieGuid}";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentDto>>(apiUrl);
