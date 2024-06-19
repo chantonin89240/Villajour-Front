@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using System.Text.Json;
 using System.Text;
+using System.Text.Json;
 using VillajourFrontend.Dto;
-using VillajourFrontend.Entity;
 using VillajourFrontend.Dto.Document;
 
 namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
@@ -120,14 +119,14 @@ public partial class DocumentDetailMairie
             {
                 await LoadDocumentsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé de vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été retiré de vos favoris", Duration = 10000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadDocumentsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été retiré", Duration = 10000 };
                 NotificationService.Notify(message);
             }
         }
