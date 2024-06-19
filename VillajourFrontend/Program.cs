@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using VillajourFrontend.Components;
+using VillajourFrontend.Helper;
 
 namespace VillajourFrontend
 {
@@ -22,7 +23,18 @@ namespace VillajourFrontend
             builder.Services.AddScoped<NotificationService>();
             builder.Services.AddScoped<TooltipService>();
             builder.Services.AddScoped<ContextMenuService>();
-            builder.Services.AddHttpClient();
+            builder.Services.AddHttpClient("Villajour", (sp, client) =>
+            {
+                var httpClient = builder.Configuration.GetSection("HttpClient");
+                client.BaseAddress = new Uri(httpClient["BaseUrl"]);
+            })
+                .AddHttpMessageHandler<JwtTokenHeaderHandler>();
+
+            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Villajour"));
+
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddTransient<JwtTokenHeaderHandler>();
+
             builder.Services.AddServerSideBlazor()
                 .AddCircuitOptions(options => { options.DetailedErrors = true; });
             
@@ -38,12 +50,10 @@ namespace VillajourFrontend
 
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ResponseType = OpenIdConnectResponseType.Code;
-                
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    NameClaimType = "name"
+                options.TokenValidationParameters = new TokenValidationParameters() {
+                    ValidateLifetime = true,
                 };
 
                 if (builder.Environment.IsDevelopment())

@@ -31,7 +31,7 @@ public partial class AddDocumentMairie : ComponentBase
 
     protected async Task LoadDocumentType()
     {
-        var apiUrl = "https://localhost:7205/Api/Document/GetDocumentType";
+        var apiUrl = "Document/GetDocumentType";
         try
         {
             var type = await HttpClient.GetFromJsonAsync<List<DocumentType>>(apiUrl);
@@ -45,7 +45,7 @@ public partial class AddDocumentMairie : ComponentBase
 
     protected async Task HandleValidSubmit()
     {
-        var apiUrl = "https://localhost:7205/Api/Document";
+        var apiUrl = "Document";
         try
         {
             using var content = new MultipartFormDataContent();

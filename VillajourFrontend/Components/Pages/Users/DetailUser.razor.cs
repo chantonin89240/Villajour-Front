@@ -38,7 +38,7 @@ namespace VillajourFrontend.Components.Pages.Users
 
         protected async Task LoadUser()
         {
-            var apiUrl = "https://localhost:44357/Api/User/" + UserId;
+            var apiUrl = "User/" + UserId;
             try
             {
                 var apiUser = await HttpClient.GetFromJsonAsync<Entity.User>(apiUrl);
@@ -66,7 +66,7 @@ namespace VillajourFrontend.Components.Pages.Users
 
         protected async Task ModifyUser(VillajourFrontend.Entity.User model)
         {
-            var apiUrl = "https://localhost:44357/Api/User";
+            var apiUrl = "/User";
             var apiModel = new Entity.User
             {
                 Id = UserId,

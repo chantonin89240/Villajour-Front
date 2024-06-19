@@ -39,7 +39,7 @@ namespace VillajourFrontend.Components.Pages.Mairie
 
         protected async Task LoadMairie()
         {
-            var apiUrl = "https://localhost:44357/Api/Mairie/" + MairieId;
+            var apiUrl = "Mairie/" + MairieId;
             try
             {
                 var apiMairie = await HttpClient.GetFromJsonAsync<Entity.Mairie>(apiUrl);
@@ -67,7 +67,7 @@ namespace VillajourFrontend.Components.Pages.Mairie
 
         protected async Task ModifyMairie(VillajourFrontend.Entity.Mairie model)
         {
-            var apiUrl = "https://localhost:44357/Api/Mairie";
+            var apiUrl = "/Mairie";
             var apiModel = new Entity.Mairie
             {
                 Id = MairieId,
