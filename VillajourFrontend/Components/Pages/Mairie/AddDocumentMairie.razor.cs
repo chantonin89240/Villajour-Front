@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
-using Radzen.Blazor;
 using System.Net.Http.Headers;
-using VillajourFrontend.Dto;
+using VillajourFrontend.Dto.Document;
 using VillajourFrontend.Entity;
 
 namespace VillajourFrontend.Components.Pages.Mairie;
@@ -24,6 +23,9 @@ public partial class AddDocumentMairie : ComponentBase
     protected AddDocumentDto newDocument = new AddDocumentDto();
     private IBrowserFile? selectedFile;
 
+    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+
     protected override async Task OnInitializedAsync()
     {
         await LoadDocumentType();
@@ -35,7 +37,7 @@ public partial class AddDocumentMairie : ComponentBase
         try
         {
             var type = await HttpClient.GetFromJsonAsync<List<DocumentType>>(apiUrl);
-            documentTypeList = type?.ToList() ?? new List<VillajourFrontend.Entity.DocumentType>();
+            documentTypeList = type?.ToList() ?? new List<DocumentType>();
         }
         catch (Exception ex)
         {
@@ -62,7 +64,7 @@ public partial class AddDocumentMairie : ComponentBase
             }
             content.Add(new StringContent(descriptionDoc), "Description");
             content.Add(new StringContent(newDocument.DocumentTypeId.ToString()), "DocumentTypeId");
-            content.Add(new StringContent("3FA85F64-5717-4562-B3FC-2C963F66AFA6"), "MairieId");
+            content.Add(new StringContent(MairieGuid.ToString()), "MairieId");
 
             if (selectedFile != null)
             {

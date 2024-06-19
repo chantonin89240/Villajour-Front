@@ -1,8 +1,8 @@
 ﻿using VillajourFrontend.Entity;
 
-namespace VillajourFrontend.Dto;
+namespace VillajourFrontend.Dto.Document;
 
-public class DocumentByMairieDetailDto
+public class DocumentDto
 {
     public int Id { get; set; }
     public DateOnly Date { get; set; }
@@ -10,5 +10,5 @@ public class DocumentByMairieDetailDto
     public string? Description { get; set; }
     public string? DocumentUrl { get; set; }
     public DocumentType? DocumentType { get; set; }
-    public bool Favorite { get; set; }
+    public Mairie? Mairie { get; set; }
 }

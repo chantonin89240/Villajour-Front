@@ -3,6 +3,7 @@ using Radzen;
 using System.Text;
 using System.Text.Json;
 using VillajourFrontend.Dto;
+using VillajourFrontend.Dto.Document;
 
 namespace VillajourFrontend.Components.Pages.Users;
 
@@ -22,6 +23,9 @@ public partial class DocumentUser
     protected List<DocumentDto> documentsFav = new List<DocumentDto>();
     protected List<DocumentByMairieFavoriteDto> documentsByMairieFav = new List<DocumentByMairieFavoriteDto>();
 
+    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    protected Guid mairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+
     protected override async Task OnInitializedAsync()
     {
         await LoadDocumentsFav();
@@ -30,7 +34,7 @@ public partial class DocumentUser
 
     protected async Task LoadDocumentsFav()
     {
-        var apiUrl = "Document/GetDocumentFav/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        var apiUrl = $"Document/GetDocumentFav/{userGuid}";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentDto>>(apiUrl);
@@ -45,7 +49,7 @@ public partial class DocumentUser
 
     protected async Task LoadDocumentsFavMairie()
     {
-        var apiUrl = "Document/GetDocumentByMairieFavorite/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        var apiUrl = "https://localhost:7205/Api/Document/GetDocumentByMairieFavorite/3fa85f64-5717-4562-b3fc-2c963f66afa6";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentByMairieFavoriteDto>>(apiUrl);
@@ -71,7 +75,7 @@ public partial class DocumentUser
         var apiUrl = "User/AddFavoriteContent/";
         FavoriteContentDto addFav = new FavoriteContentDto()
         {
-            UserId = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6"),
+            UserId = userGuid,
             AnnouncementId = null,
             EventId = null,
             DocumentId = idDocument
@@ -117,7 +121,7 @@ public partial class DocumentUser
         var apiUrl = "User/DeleteFavoriteContent/";
         FavoriteContentDto deleteFav = new FavoriteContentDto()
         {
-            UserId = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6"),
+            UserId = userGuid,
             AnnouncementId = null,
             EventId = null,
             DocumentId = idDocument

@@ -1,25 +1,25 @@
-﻿<!-- Pages/AddEventMairie.razor -->
-@page "/AddEventMairie"
+﻿<!-- Pages/UpdateEventMairie.razor -->
+@page "/UpdateEventMairie"
 @using Radzen
 @using Radzen.Blazor
 @using VillajourFrontend.Dto.Event
 
-<RadzenTemplateForm TItem="AddEventDto" Data="@newEvent" Submit="@HandleValidSubmit">
+<RadzenTemplateForm TItem="EventDto" Data="@Event" Submit="@HandleValidSubmit">
     <RadzenRow Gap="0">
         <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4 product-title">
-            <RadzenTextBox @bind-Value="@newEvent.Title" Label="Titre" Placeholder="Titre de l'événement" Required="true" />
+            <RadzenTextBox @bind-Value="@Event.Title" Label="Titre" Placeholder="Titre de l'événement" Required="true" />
         </RadzenColumn>
         <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
-            <RadzenDropDown @bind-Value=@newEvent.EventTypeId TValue="int" Data=@eventTypeList TextProperty="Libelle" ValueProperty="Id" Required="true" />
+            <RadzenDropDown @bind-Value=@Event.EventType.Id TValue="int" Data=@eventTypeList TextProperty="Libelle" ValueProperty="Id" Required="true" />
         </RadzenColumn>
     </RadzenRow>
 
     <RadzenRow Gap="0">
         <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4 product-title">
-            <RadzenTextBox @bind-Value="@newEvent.Address" Label="Adresse" Placeholder="Adresse de l'événement" Required="true" />
+            <RadzenTextBox @bind-Value="@Event.Address" Label="Adresse" Placeholder="Adresse de l'événement" Required="true" />
         </RadzenColumn>
         <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
-            <RadzenTextArea @bind-Value="@newEvent.Description" Label="Description" Placeholder="Description de l'événement" Rows="4" class="addDescription" />
+            <RadzenTextArea @bind-Value="@Event.Description" Label="Description" Placeholder="Description de l'événement" Rows="4" class="addDescription" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -27,13 +27,13 @@
         <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4 product-title">
             <div class="rz-p-12 rz-text-align-center">
                 <RadzenLabel Text="Date et heure de début" Component="DatePickerWithTime" Style="margin-right: 8px; vertical-align: middle;" />
-                <RadzenDatePicker @bind-Value=@newEvent.StartTime ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="MM/dd/yyyy HH:mm" Name="DatePickerWithTime" />
+                <RadzenDatePicker @bind-Value=@Event.StartTime ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="dd/MM/yyyy HH:mm" Name="DatePickerWithTime" />
             </div>
         </RadzenColumn>
         <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
             <div class="rz-p-12 rz-text-align-center">
                 <RadzenLabel Text="Date et heure de fin" Component="DatePickerWithTime" Style="margin-right: 8px; vertical-align: middle;" />
-                <RadzenDatePicker @bind-Value=@newEvent.EndTime ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="MM/dd/yyyy HH:mm" Name="DatePickerWithTime" />
+                <RadzenDatePicker @bind-Value=@Event.EndTime ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="dd/MM/yyyy HH:mm" Name="DatePickerWithTime" />
             </div>
         </RadzenColumn>
     </RadzenRow>

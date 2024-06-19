@@ -1,0 +1,16 @@
+﻿<!-- Pages/DetailEventMairie.razor -->
+@page "/DetailEventMairie"
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Dto.Event
+
+@if(Event != null)
+{
+    <p> Description : <br /> @Event.Description</p>
+    <hr />
+    <p>Adresse : <br /> @Event.Address</p>
+}
+else
+{
+    <p>Le détail de l'événement n'a pas été trouvé</p>
+}

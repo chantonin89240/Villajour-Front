@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text;
 using VillajourFrontend.Dto;
 using VillajourFrontend.Entity;
+using VillajourFrontend.Dto.Document;
 
 namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
 

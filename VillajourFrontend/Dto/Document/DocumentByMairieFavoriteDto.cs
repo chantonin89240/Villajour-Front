@@ -1,6 +1,6 @@
 ﻿using VillajourFrontend.Entity;
 
-namespace VillajourFrontend.Dto;
+namespace VillajourFrontend.Dto.Document;
 
 public class DocumentByMairieFavoriteDto
 {
@@ -9,7 +9,7 @@ public class DocumentByMairieFavoriteDto
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? DocumentUrl { get; set; }
-    public DocumentType? DocumentType{ get; set; }
+    public DocumentType? DocumentType { get; set; }
     public Mairie? Mairie { get; set; }
     public bool Favorite { get; set; }
 }
