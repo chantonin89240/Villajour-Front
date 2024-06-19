@@ -28,7 +28,7 @@ public partial class DocumentMairie
 
     protected async Task LoadDocuments()
     {
-        var apiUrl = "https://localhost:7205/Api/Document/GetDocumentHistoByMairie/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        var apiUrl = "Document/GetDocumentHistoByMairie/3fa85f64-5717-4562-b3fc-2c963f66afa6";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentDto>>(apiUrl);
@@ -58,7 +58,7 @@ public partial class DocumentMairie
     // suppression d'un document
     protected async Task OnDeleteDocument(int id)
     {
-        var apiUrl = "https://localhost:7205/Api/Document/" + id;
+        var apiUrl = "Document/" + id;
         try
         {
             var validation = await HttpClient.DeleteAsync(apiUrl);
@@ -89,7 +89,7 @@ public partial class DocumentMairie
     // download du document
     protected async Task OnDownloadDocument(string url)
     {
-        var apiUrl = $"https://localhost:7205/Api/Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
+        var apiUrl = $"Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
         NavigationManager.NavigateTo(apiUrl, true);
     }
 

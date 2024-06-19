@@ -30,7 +30,7 @@ public partial class DocumentUser
 
     protected async Task LoadDocumentsFav()
     {
-        var apiUrl = "https://localhost:7205/Api/Document/GetDocumentFav/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        var apiUrl = "Document/GetDocumentFav/3fa85f64-5717-4562-b3fc-2c963f66afa6";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentDto>>(apiUrl);
@@ -45,7 +45,7 @@ public partial class DocumentUser
 
     protected async Task LoadDocumentsFavMairie()
     {
-        var apiUrl = "https://localhost:7205/Api/Document/GetDocumentByMairieFavorite/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        var apiUrl = "Document/GetDocumentByMairieFavorite/3fa85f64-5717-4562-b3fc-2c963f66afa6";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentByMairieFavoriteDto>>(apiUrl);
@@ -61,14 +61,14 @@ public partial class DocumentUser
     // download du document
     protected async Task OnDownloadDocument(string url)
     {
-        var apiUrl = $"https://localhost:7205/Api/Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
+        var apiUrl = $"Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
         NavigationManager.NavigateTo(apiUrl, true);
     }
 
     // Ajout d'un document favoris
     protected async Task OnAddDocumentFav(int idDocument)
     {
-        var apiUrl = "https://localhost:7205/Api/User/AddFavoriteContent/";
+        var apiUrl = "User/AddFavoriteContent/";
         FavoriteContentDto addFav = new FavoriteContentDto()
         {
             UserId = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6"),
@@ -114,7 +114,7 @@ public partial class DocumentUser
     // suppression d'un document favoris
     protected async Task OnDeleteDocumentFav(int idDocument)
     {
-        var apiUrl = "https://localhost:7205/Api/User/DeleteFavoriteContent/";
+        var apiUrl = "User/DeleteFavoriteContent/";
         FavoriteContentDto deleteFav = new FavoriteContentDto()
         {
             UserId = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6"),

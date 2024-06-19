@@ -32,7 +32,7 @@ public partial class DocumentDetailMairie
 
     protected async Task LoadDocumentsDetail()
     {
-        var apiUrl = $"https://localhost:7205/Api/Document/GetDocumentByMairieDetail/{userGuid}/{MairieGuid}";
+        var apiUrl = $"Document/GetDocumentByMairieDetail/{userGuid}/{MairieGuid}";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentByMairieDetailDto>>(apiUrl);
@@ -48,14 +48,14 @@ public partial class DocumentDetailMairie
     // download du document
     protected async Task OnDownloadDocument(string url)
     {
-        var apiUrl = $"https://localhost:7205/Api/Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
+        var apiUrl = $"Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
         NavigationManager.NavigateTo(apiUrl, true);
     }
 
     // Ajout d'un document favoris
     protected async Task OnAddDocumentFav(int idDocument)
     {
-        var apiUrl = "https://localhost:7205/Api/User/AddFavoriteContent/";
+        var apiUrl = "User/AddFavoriteContent/";
         FavoriteContentDto addFav = new FavoriteContentDto()
         {
             UserId = userGuid,
@@ -97,7 +97,7 @@ public partial class DocumentDetailMairie
     // suppression d'un document favoris
     protected async Task OnDeleteDocumentFav(int idDocument)
     {
-        var apiUrl = "https://localhost:7205/Api/User/DeleteFavoriteContent/";
+        var apiUrl = "User/DeleteFavoriteContent/";
         FavoriteContentDto deleteFav = new FavoriteContentDto()
         {
             UserId = userGuid,
