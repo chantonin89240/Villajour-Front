@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace VillajourFrontend.Entity;
+﻿namespace VillajourFrontend.Entity;
 
 public class Mairie
 {
