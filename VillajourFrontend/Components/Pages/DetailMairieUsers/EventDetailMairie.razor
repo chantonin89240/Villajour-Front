@@ -42,18 +42,18 @@ else
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4">
+                    <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                         <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
                     </RadzenColumn>
                     @if (eventEnt.Favorite)
                     {
-                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenColumn Size="6" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                             <RadzenButton Click="@(() => OnDeleteEventFav(eventEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
                         </RadzenColumn>
                     }
                     else
                     {
-                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenColumn Size="6" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                             <RadzenButton Click="@(() => OnAddEventFav(eventEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
                         </RadzenColumn>
                     }
