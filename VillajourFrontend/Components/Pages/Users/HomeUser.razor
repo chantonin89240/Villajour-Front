@@ -1,5 +1,61 @@
 ﻿@page "/HomeUser"
+@inject HttpClient HttpClient
+@using VillajourFrontend.Entity
+@using Radzen
+@using Radzen.Blazor
 
-<h3>HomeUser</h3>
+@code {
+    List<Mairie> mairies = new List<Mairie>();
+    List<Mairie> filteredMairies = new List<Mairie>();
+    string searchQuery = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        mairies = await HttpClient.GetFromJsonAsync<List<Mairie>>("https://localhost:7205/Api/Mairie");
+        filteredMairies = mairies;
+    }
+
+    void FilterMairies()
+    {
+        if (string.IsNullOrEmpty(searchQuery))
+        {
+            filteredMairies = mairies;
+        }
+        else
+        {
+            filteredMairies = mairies.Where(m => m.Address != null && m.Address.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+    }
+}
+
+<div class="container">
+    <h3>Recherche de Mairies</h3>
+    <div class="row">
+        <div class="col-md-10">
+            <RadzenTextBox @bind-Value="searchQuery" Placeholder="Entrer l'adresse d'une mairie" Style="width: 100%;" Change="@((args) => FilterMairies())" />
+        </div>
+        <div class="col-md-2">
+            <RadzenButton Text="Rechercher" Click="@FilterMairies" ButtonStyle="ButtonStyle.Primary" Icon="search" />
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <RadzenDataGrid Data="@filteredMairies" TItem="Mairie" AutoGenerateColumns="false">
+            <Columns>
+                <RadzenDataGridColumn TItem="Mairie" Property="Address" Title="Adresse" />
+                <RadzenDataGridColumn TItem="Mairie" Property="Phone" Title="Téléphone" />
+                <RadzenDataGridColumn TItem="Mairie" Property="Siret" Title="SIRET" />
+                <RadzenDataGridColumn TItem="Mairie" Context="mairie" Width="50px">
+                    <Template Context="mairie">
+                        <RadzenImage Path="@mairie.Picture" Style="max-height: 50px; max-width: 50px;" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+</div>
+
+
+
 
 
