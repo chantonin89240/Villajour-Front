@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Radzen;
 using System.Text;
 using System.Text.Json;
@@ -18,7 +19,11 @@ public partial class DocumentUser
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
-    [Inject] private NotificationService? NotificationService { get; set; }
+    [Inject] 
+    private NotificationService? NotificationService { get; set; }
+
+    [Inject]
+    private IJSRuntime JS { get; set; }
 
     protected List<DocumentDto> documentsFav = new List<DocumentDto>();
     protected List<DocumentByMairieFavoriteDto> documentsByMairieFav = new List<DocumentByMairieFavoriteDto>();
@@ -65,8 +70,16 @@ public partial class DocumentUser
     // download du document
     protected async Task OnDownloadDocument(string url)
     {
+        var uri = new Uri(url, true);
+
         var apiUrl = $"Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
-        NavigationManager.NavigateTo(apiUrl, true);
+       
+        var fileStream = await HttpClient.GetStreamAsync(apiUrl);
+        var fileName =  uri.Segments.Last();
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 
     // Ajout d'un document favoris

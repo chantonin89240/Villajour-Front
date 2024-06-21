@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Radzen;
 using System.Text;
 using System.Text.Json;
 using VillajourFrontend.Dto;
 using VillajourFrontend.Dto.Document;
+using Microsoft.JSInterop;
 
 namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
 
@@ -18,8 +20,11 @@ public partial class DocumentDetailMairie
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
-    [Inject] private NotificationService? NotificationService { get; set; }
+    [Inject] 
+    private NotificationService? NotificationService { get; set; }
 
+    [Inject]
+    private IJSRuntime JS { get; set; }
 
     protected List<DocumentByMairieDetailDto> documentsDetail = new List<DocumentByMairieDetailDto>();
     protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
@@ -48,8 +53,16 @@ public partial class DocumentDetailMairie
     // download du document
     protected async Task OnDownloadDocument(string url)
     {
+        var uri = new Uri(url, true);
+
         var apiUrl = $"Document/DownloadDocument?fileUrl={Uri.EscapeDataString(url)}";
-        NavigationManager.NavigateTo(apiUrl, true);
+
+        var fileStream = await HttpClient.GetStreamAsync(apiUrl);
+        var fileName = uri.Segments.Last();
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 
     // Ajout d'un document favoris
