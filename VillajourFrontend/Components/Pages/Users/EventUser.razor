@@ -26,14 +26,14 @@ else
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
                         <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(eventEnt.Title)</RadzenText>
                     </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="5" Class="rz-p-4">
+                    <RadzenColumn Size="12" SizeLG="8" Class="rz-p-4">
                         <RadzenRow Gap="0">
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date et horaire de début</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Horaire d'ouverture</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.StartTime)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date et horaire de fin</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Horaire de fermeture</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.EndTime)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
@@ -42,10 +42,10 @@ else
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4">
+                    <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                         <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id, true))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
                     </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                    <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                         <RadzenButton Click="@(() => OnDeleteEventFav(eventEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
                     </RadzenColumn>
                 </RadzenRow>
@@ -68,21 +68,21 @@ else if (!eventsByMairieFav.Any())
 }
 else
 {
-    <RadzenDataList Style="height:400px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@eventsByMairieFav" TItem="EventByMairieFavoriteDto" PageSize="3" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+    <RadzenDataList Style="height:550px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@eventsByMairieFav" TItem="EventByMairieFavoriteDto" PageSize="4" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
         <Template Context="eventEnt">
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
                         <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(eventEnt.Title)</RadzenText>
                     </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="5" Class="rz-p-4">
+                    <RadzenColumn Size="12" SizeLG="8" Class="rz-p-4">
                         <RadzenRow Gap="0">
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date et horaire de début</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Horaire d'ouverture</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.StartTime)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date et horaire de fin</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Horaire de fermeture</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.EndTime)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
@@ -91,18 +91,18 @@ else
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4">
-                        <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id, false))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                    <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id, true))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
                     </RadzenColumn>
                     @if (eventEnt.Favorite)
                     {
-                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                             <RadzenButton Click="@(() => OnDeleteEventFav(eventEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
                         </RadzenColumn>
                     }
                     else
                     {
-                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                             <RadzenButton Click="@(() => OnAddEventFav(eventEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
                         </RadzenColumn>
                     }
