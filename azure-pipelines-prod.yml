@@ -3,40 +3,102 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- master
+trigger: none
 
 variables:
   solution: '*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  
+pool:
+  vmImage: 'ubuntu-latest'
+jobs:
 
-steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk 8.0.x'
-  inputs:
-    version: 8.0.x
+# Build job and scan
 
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: restore
-    projects: '**/*.csproj'
-
-- task: DotNetCoreCLI@2
+- job: build
   displayName: Build
-  inputs:
-    command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: test
-    projects: '**/*.UnitTest.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk 8.0.x'
+    inputs:
+      version: 8.0.x
 
-- task: QodanaScan@2024
-  env:
-    QODANA_TOKEN: $(QODANA_TOKEN)
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: '**/*.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: '**/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: test
+      projects: '**/*.UnitTest.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+ 
+- job: scan
+  displayName: Scan
+  dependsOn: build
+  steps:
+  - task: QodanaScan@2024
+    env:
+      QODANA_TOKEN: $(QODANA_TOKEN)
+
+- job: deploy
+  displayName: Publish
+  dependsOn: scan
+  steps:
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'Frontend_$(Build.BuildNumber)'
+      publishLocation: 'Container'
+    condition: succeededOrFailed()
+
+  - task: AzureAppServiceSettings@1
+    inputs:
+      azureSubscription: 'Frontend (Diiage2024.VillAjour.1)(b0868e01-cd40-4fd5-ad81-2bfbe69f968a)'
+      appName: 'appvillajour'
+      resourceGroupName: 'fakeprod'
+      appSettings: |
+        [
+          {
+          "name": "OpenIDConnectSettings__Authority",
+          "value": "https://keycloak.villajour.fr:8443/realms/Villajour/",
+          "slotSetting": false
+          },
+          {
+          "name": "OpenIDConnectSettings__ClientId",
+          "value": "dev-villajour-front-end",
+          "slotSetting": false
+          },
+          {
+          "name": "OpenIDConnectSettings__ClientSecret",
+          "value": "$(OPENIDCONNECT:CLIENTSECRET)",
+          "slotSetting": false
+          }
+        ]
+
+  - task: AzureRmWebAppDeployment@4
+    inputs:
+      ConnectionType: 'AzureRM'
+      azureSubscription: 'Frontend (Diiage2024.VillAjour.1)(b0868e01-cd40-4fd5-ad81-2bfbe69f968a)'
+      appType: 'webAppLinux'
+      WebAppName: 'appvillajour'
+      packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+      RuntimeStack: 'DOTNETCORE|8.0'
