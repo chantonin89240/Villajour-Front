@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
-using System.Reflection;
 using VillajourFrontend.Dto.Event;
 using VillajourFrontend.Entity;
 
@@ -39,13 +37,13 @@ public partial class AddEventMairie : ComponentBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du chargement des rendez-vous: {ex.Message}");
+            Console.WriteLine($"Erreur lors du chargement des événements : {ex.Message}");
         }
     }
 
     protected async Task HandleValidSubmit()
     {
-        var apiUrl = "https://localhost:7205/Api/Event";
+        var apiUrl = "Event";
         try
         {
             newEvent.MairieId = MairieGuid;

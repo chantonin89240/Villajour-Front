@@ -1,17 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿namespace VillajourFrontend.Entity;
 
-namespace VillajourFrontend.Entity
+public class AnnouncementType
 {
-    public class AnnouncementType
-    {
-        [Key]
-        [Required]
-        [Column(Order = 0)]
-        public int Id { get; set; }
-
-        [Required]
-        [Column(Order = 1)]
-        public string? Libelle { get; set; }
-    }
+    public int Id { get; set; }
+    public string? Libelle { get; set; }
 }

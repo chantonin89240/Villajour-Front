@@ -1,58 +1,28 @@
 ﻿@page "/AddAnnouncementMairie"
 @using Radzen
 @using Radzen.Blazor
-@using VillajourFrontend.Entity
-@inject HttpClient HttpClient
-@inject DialogService DialogService
+@using VillajourFrontend.Dto.Announcement
 
-<RadzenTemplateForm TItem="Announcement" Data="@model" Submit="@OnSubmit">
-    <div class="row form-group">
-        <div class="col-md-3">
-            <RadzenLabel Text="Title" />
-        </div>
-        <div class="col">
-            <RadzenTextBox @bind-Value="@model.Title" Name="Title" Style="width:100%" />
-            <RadzenRequiredValidator Text="Title is required" Component="Title" />
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-md-3">
-            <RadzenLabel Text="Description" />
-        </div>
-        <div class="col">
-            <RadzenTextBox @bind-Value="@model.Description" Name="Description" Style="width:100%" />
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-md-3">
-            <RadzenLabel Text="Date" />
-        </div>
-        <div class="col">
-            <RadzenDatePicker @bind-Value="@model.Date" Name="Date" ShowTime="false" />
-            <RadzenRequiredValidator Text="Date is required" Component="Date" />
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-md-3"></div>
-        <div class="col">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
-        </div>
-    </div>
+<RadzenTemplateForm TItem="AddAnnouncementDto" Data="@newAnnouncement" Submit="@HandleValidSubmit">
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4 product-title">
+            <RadzenTextBox @bind-Value="@newAnnouncement.Title" Label="Titre" Placeholder="Titre de l'annonce" Required="true" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
+            <RadzenDropDown @bind-Value=@newAnnouncement.AnnouncementTypeId TValue="int" Data=@announcementTypeList TextProperty="Libelle" ValueProperty="Id" Required="true" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4">
+            <RadzenTextArea @bind-Value="@newAnnouncement.Description" Label="Description" Placeholder="Description de l'événement" Rows="4" class="addDescription" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4">
+            <RadzenButton Text="Ajouter" Type="submit" ButtonStyle="ButtonStyle.Primary" />
+        </RadzenColumn>
+    </RadzenRow>
 </RadzenTemplateForm>
 
-@code {
-    Announcement model = new Announcement();
-
-    private async Task OnSubmit()
-    {
-        var response = await HttpClient.PostAsJsonAsync("https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Announcement", model);
-        if (response.IsSuccessStatusCode)
-        {
-            DialogService.Close(model);
-        }
-        else
-        {
-            Console.WriteLine("Failed to save the announcement.");
-        }
-    }
-}

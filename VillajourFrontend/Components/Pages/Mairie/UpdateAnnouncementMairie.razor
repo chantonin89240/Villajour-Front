@@ -1,0 +1,28 @@
+﻿<!-- Pages/UpdateAnnouncementMairie.razor -->
+@page "/UpdateAnnouncementMairie"
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Dto.Announcement
+
+<RadzenTemplateForm TItem="AnnouncementDto" Data="@announcement" Submit="@HandleValidSubmit">
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4 product-title">
+            <RadzenTextBox @bind-Value="@announcement.Title" Label="Titre" Placeholder="Titre de l'événement" Required="true" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
+            <RadzenDropDown @bind-Value=@announcement.AnnouncementType.Id TValue="int" Data=@announcementTypeList TextProperty="Libelle" ValueProperty="Id" Required="true" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4">
+            <RadzenTextArea @bind-Value="@announcement.Description" Label="Description" Placeholder="Description de l'événement" Rows="4" class="addDescription" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow Gap="0">
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4">
+            <RadzenButton Text="Ajouter" Type="submit" ButtonStyle="ButtonStyle.Primary" />
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenTemplateForm>

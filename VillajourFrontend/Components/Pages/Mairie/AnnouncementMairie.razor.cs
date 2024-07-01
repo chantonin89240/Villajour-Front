@@ -1,117 +1,119 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using VillajourFrontend.Entity;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using System.Net.Http;
-using System.Net.Http.Json;
-using VillajourFrontend.Components.Pages.DetailMairieUsers;
+using VillajourFrontend.Dto.Announcement;
+using VillajourFrontend.Entity;
 
-namespace VillajourFrontend.Components.Pages.Mairie
+namespace VillajourFrontend.Components.Pages.Mairie;
+
+public partial class AnnouncementMairie 
 {
-    public partial class AnnouncementMairie : ComponentBase
+    [Inject]
+    protected HttpClient? HttpClient { get; set; }
+
+    [Inject]
+    protected DialogService? DialogService { get; set; }
+
+    [Inject]
+    protected NavigationManager? NavigationManager { get; set; }
+
+    [Inject]
+    private NotificationService? NotificationService { get; set; }
+
+    protected List<AnnouncementDto> announcement = new List<AnnouncementDto>();
+
+    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    protected Guid mairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        protected HttpClient HttpClient { get; set; }
-        [Inject]
-        protected DialogService DialogService { get; set; }
-
-        private List<Announcement> models;
-        private bool isMairie = true;
-
-        protected override async Task OnInitializedAsync()
-        {
-            try
-            {
-                models = await HttpClient.GetFromJsonAsync<List<Announcement>>("https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Announcement");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to load announcements: {ex.Message}");
-            }
-        }
-
-
-        private async Task AddAnnouncement()
-        {
-            var newAnnouncement = new Announcement(); 
-            var parameters = new Dictionary<string, object>();
-
-           //var dialogOptions = new DialogOptions() { Width = "700px", Height = "400px" };
-
-            var result = await DialogService.OpenAsync<AddAnnouncementMairie>("Ajouter une annonce");
-            //if (result != null)
-            //{
-            //    HttpResponseMessage response = await HttpClient.PostAsJsonAsync("https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Announcement", newAnnouncement);
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        models.Add(newAnnouncement);
-            //        StateHasChanged();
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Failed to add the announcement.");
-            //    }
-            //}
-        }
-
-
-
-
-
-        //private async Task EditAnnouncement(int id)
-        //{
-        //    var announcementToEdit = models.FirstOrDefault(a => a.Id == id);
-        //    if (announcementToEdit != null)
-        //    {
-        //        var parameters = new Dictionary<string, object>
-        //{
-        //    {"announcement", announcementToEdit},
-        //    {"isNew", false}
-        //};
-
-        //        var result = await DialogService.OpenAsync<AnnouncementDetailMairie>("Modifier une annonce", parameters);
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Announcement not found.");
-        //    }
-        //}
-
-
-
-        private async Task DeleteAnnouncement(int id)
-        {
-            HttpResponseMessage response = await HttpClient.DeleteAsync($"https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Announcement/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                models = await HttpClient.GetFromJsonAsync<List<Announcement>>("https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Announcement/");
-                StateHasChanged(); // Refresh the UI
-            }
-            else
-            {
-                // Handle errors
-                Console.WriteLine("Failed to delete the announcement.");
-            }
-        }
-
-        private async Task ViewDetails(int id)
-        {
-            var announcement = models.FirstOrDefault(a => a.Id == id);
-            if (announcement != null)
-            {
-                var parameters = new Dictionary<string, object>
-        {
-            {"announcement", announcement}
-        };
-
-              await DialogService.OpenAsync<AnnouncementDetailMairie>("Détails de l'annonce", parameters);
-            }
-            else
-            {
-                Console.WriteLine("Announcement not found.");
-            }
-        }
-
+        await LoadAnnouncement();
     }
+
+    protected async Task LoadAnnouncement()
+    {
+        var apiUrl = $"Announcement/GetAnnouncementHistoByMairie/{mairieGuid}";
+        try
+        {
+            var annonceMairie = await HttpClient.GetFromJsonAsync<List<AnnouncementDto>>(apiUrl);
+            announcement = annonceMairie?.ToList() ?? new List<AnnouncementDto>();
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur lors du chargement des événements : {ex.Message}");
+        }
+    }
+
+
+    // redirige vers la page d'ajout d'une annonce
+    private async void OnAddNewAnnouncement()
+    {
+        var newAnnouncement = new Announcement();
+        var result = await DialogService.OpenAsync<AddAnnouncementMairie>("Ajouter une annonce");
+
+        if (result != null && result)
+        {
+            await LoadAnnouncement();
+            NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été ajouté", Duration = 10000 };
+            NotificationService.Notify(message);
+        }
+    }
+
+    // suppression d'un event
+    protected async Task OnDeleteAnnouncement(int id)
+    {
+        var apiUrl = $"Announcement/{id}";
+        try
+        {
+            var validation = await HttpClient.DeleteAsync(apiUrl);
+
+            if (validation.IsSuccessStatusCode)
+            {
+                await LoadAnnouncement();
+
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été supprimé", Duration = 10000 };
+                NotificationService.Notify(message);
+            }
+            else
+            {
+                await LoadAnnouncement();
+
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été supprimé", Duration = 10000 };
+                NotificationService.Notify(message);
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur lors du chargement des annonces : {ex.Message}");
+        }
+    }
+
+    // appel pour l'affichage de l'update d'un event
+    protected async Task OnUpdateAnnouncement(int id)
+    {
+        var announcementEnt = announcement.FirstOrDefault(a => a.Id == id);
+        if (announcementEnt != null)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"Announcement", announcementEnt}
+            };
+
+            var result = await DialogService.OpenAsync<UpdateAnnouncementMairie>("Modification de l'annonce", parameters);
+
+            if (result != null && result)
+            {
+                await LoadAnnouncement();
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été modifié", Duration = 10000 };
+                NotificationService.Notify(message);
+            }
+        }
+        else
+        {
+            Console.WriteLine("announcement not found.");
+        }
+    }
+
 }
