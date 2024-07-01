@@ -43,7 +43,7 @@ public partial class AddAnnouncementMairie : ComponentBase
 
     protected async Task HandleValidSubmit()
     {
-        var apiUrl = "https://localhost:7205/Api/Announcement";
+        var apiUrl = "Announcement";
         try
         {
             newAnnouncement.MairieId = MairieGuid;

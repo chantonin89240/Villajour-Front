@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using System.Text.Json;
 using System.Text;
-using VillajourFrontend.Dto.Document;
+using System.Text.Json;
 using VillajourFrontend.Dto;
 using VillajourFrontend.Dto.Event;
-using VillajourFrontend.Components.Pages.Users;
 
 namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
 
@@ -20,7 +18,8 @@ public partial class EventDetailMairie
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
-    [Inject] private NotificationService? NotificationService { get; set; }
+    [Inject] 
+    private NotificationService? NotificationService { get; set; }
 
     protected List<EventByMairieDetailDto> eventsDetail = new List<EventByMairieDetailDto>();
     protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
@@ -84,7 +83,7 @@ public partial class EventDetailMairie
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du chargement des documents : {ex.Message}");
+            Console.WriteLine($"Erreur lors du chargement des événements : {ex.Message}");
         }
     }
 
@@ -126,7 +125,7 @@ public partial class EventDetailMairie
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du chargement des documents : {ex.Message}");
+            Console.WriteLine($"Erreur lors du chargement des événements : {ex.Message}");
         }
     }
 

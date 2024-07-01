@@ -1,78 +1,49 @@
-﻿@page "/AnnouncementDetailMairie/{Id:int}"
-@inject HttpClient HttpClient
-@inject DialogService DialogService
-@using VillajourFrontend.Entity
+﻿@page "/AnnouncementDetailMairie"
 @using Radzen
 @using Radzen.Blazor
+@using VillajourFrontend.Dto.Announcement
 
-@code {
-    [Parameter]
-    public Announcement Announcement { get; set; }
-    bool isMairie = false; 
+<div class="AnnouncementTitle">
+    <h1>Annonces de la mairie</h1>
+</div>
 
-    protected void OnSubmit()
-    {
-        DialogService.Close(Announcement);
-    }
-}
-
-@if (Announcement != null)
+@if (announcementDetail == null)
 {
-    if (isMairie == true)
-    {
-        
-    <RadzenTemplateForm TItem="Announcement" Data="@Announcement" Submit="@(args => OnSubmit())">
-        <div class="row form-group">
-            <div class="col-md-3">
-                <RadzenLabel Text="Title" />
-            </div>
-            <div class="col-md-9">
-                <RadzenTextBox @bind-Value="@Announcement.Title" ReadOnly="!isMairie" Style="width:100%" />
-            </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-md-3">
-                <RadzenLabel Text="Description" />
-            </div>
-            <div class="col-md-9">
-                <RadzenTextBox @bind-Value="@Announcement.Description" ReadOnly="!isMairie" Style="width:100%" />
-            </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-md-3">
-                <RadzenLabel Text="Date" />
-            </div>
-            <div class="col-md-9">
-                <RadzenDatePicker @bind-Value="@Announcement.Date" Disabled="!isMairie" />
-            </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-md-12 text-right">
-                <RadzenButton ButtonType="ButtonType.Submit" Text="Enregistrer" Visible="isMairie" />
-            </div>
-        </div>
-    </RadzenTemplateForm>
-    }
-    else
-    {
-           <div class="row form-group">
-                <RadzenLabel Text="@Announcement.Title" />
-                <RadzenLabel Text="@Announcement.Description" />
-                <RadzenLabel Text="@Announcement.Date.ToShortDateString()" />
-            </div>
-    }
+    <p>La mairie n'a pas d'annonce !</p>
+}
+else if (!announcementDetail.Any())
+{
+    <p>La mairie n'a pas d'annonce !</p>
 }
 else
 {
-    <p>Announcement not found.</p>
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenDataList Data="@announcementDetail" TItem="AnnouncementByMairieDetailDto" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+                    <Template Context="announcementEnt">
+                        <div class="row mb-3">
+                            <div class="col-md-10">
+                                <h4>@announcementEnt.Title</h4>
+                                <p>@announcementEnt.Description</p>
+                                <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
+                            </div>
+                            @if (announcementEnt.Favorite)
+                            {
+                                <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                    <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                    <RadzenButton Click="@(() => OnAddAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
+                                </div>
+                            }
+                        </div>
+                    </Template>
+                </RadzenDataList>
+            </div>
+        </div>
+    </div>
 }
-
-<style>
-    .form-group {
-        margin-bottom: 16px;
-    }
-
-    .text-right {
-        text-align: right;
-    }
-</style>

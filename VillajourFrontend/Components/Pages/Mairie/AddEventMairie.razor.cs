@@ -43,7 +43,7 @@ public partial class AddEventMairie : ComponentBase
 
     protected async Task HandleValidSubmit()
     {
-        var apiUrl = "https://localhost:7205/Api/Event";
+        var apiUrl = "Event";
         try
         {
             newEvent.MairieId = MairieGuid;

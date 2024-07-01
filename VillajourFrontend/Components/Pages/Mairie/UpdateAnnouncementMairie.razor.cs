@@ -30,7 +30,7 @@ public partial class UpdateAnnouncementMairie : ComponentBase
 
     protected async Task LoadAnnouncementType()
     {
-        var apiUrl = "https://localhost:7205/Api/Event/GetEventType";
+        var apiUrl = "Announcement/GetAnnouncementType";
         try
         {
             var type = await HttpClient.GetFromJsonAsync<List<AnnouncementType>>(apiUrl);
@@ -38,19 +38,18 @@ public partial class UpdateAnnouncementMairie : ComponentBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du chargement des rendez-vous: {ex.Message}");
+            Console.WriteLine($"Erreur lors du chargement des annonces : {ex.Message}");
         }
     }
 
     protected async Task HandleValidSubmit()
     {
-        var apiUrl = "https://localhost:7205/Api/Event/" + announcement.Id;
+        var apiUrl = "Announcement/" + announcement.Id;
         try
         {
             Announcement updateAnnouncement = new Announcement()
             {
                 Id = announcement.Id,
-                Date = announcement.Date,
                 Description = announcement.Description,
                 Title = announcement.Title,
                 AnnouncementTypeId = announcement.AnnouncementType.Id,

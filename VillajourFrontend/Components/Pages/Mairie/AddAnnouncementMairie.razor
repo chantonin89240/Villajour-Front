@@ -14,13 +14,8 @@
     </RadzenRow>
 
     <RadzenRow Gap="0">
-        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4">
             <RadzenTextArea @bind-Value="@newAnnouncement.Description" Label="Description" Placeholder="Description de l'événement" Rows="4" class="addDescription" />
-        </RadzenColumn>
-        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4 product-title">
-            <div class="rz-p-12 rz-text-align-center">
-                <RadzenDatePicker @bind-Value=@newAnnouncement.Date ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="dd/MM/yyyy" Name="DatePickerWithTime" />
-            </div>
         </RadzenColumn>
     </RadzenRow>
 
