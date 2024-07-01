@@ -2,6 +2,7 @@
 @using VillajourFrontend.Dto.Announcement
 @using Radzen
 @using Radzen.Blazor
+@attribute [Authorize(Roles = "mairie")]
 
 <div class="announcementTitle">
     <h1>Vos annonces</h1>

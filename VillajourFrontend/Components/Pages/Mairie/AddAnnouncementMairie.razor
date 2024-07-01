@@ -1,6 +1,7 @@
 ﻿@page "/AddAnnouncementMairie"
 @using Radzen
 @using Radzen.Blazor
+@attribute [Authorize(Roles = "mairie")]
 @using VillajourFrontend.Dto.Announcement
 
 <RadzenTemplateForm TItem="AddAnnouncementDto" Data="@newAnnouncement" Submit="@HandleValidSubmit">

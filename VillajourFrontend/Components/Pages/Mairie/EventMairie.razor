@@ -4,6 +4,7 @@
 @using Radzen.Blazor
 @using VillajourFrontend.Entity
 @using VillajourFrontend.Dto.Event
+@attribute [Authorize(Roles = "mairie")]
 
 <div class="eventTitle">
     <h1>Vos événements</h1>

@@ -3,6 +3,7 @@
 @using Radzen
 @using Radzen.Blazor
 @using VillajourFrontend.Dto.Announcement
+@attribute [Authorize(Roles = "user")]
 
 <div class="AnnouncementTitle">
     <h1>Vos annonces favoris</h1>

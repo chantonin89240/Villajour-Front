@@ -17,6 +17,8 @@ namespace VillajourFrontend
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            builder.Services.AddCascadingAuthenticationState();
+            
             // Ajouter des services au conteneur.
             builder.Services.AddRazorPages();
             builder.Services.AddScoped<DialogService>();
@@ -37,12 +39,8 @@ namespace VillajourFrontend
 
             builder.Services.AddServerSideBlazor()
                 .AddCircuitOptions(options => { options.DetailedErrors = true; });
-            
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
+
+            builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddCookie()
             .AddOpenIdConnect(options =>
             {
@@ -51,7 +49,6 @@ namespace VillajourFrontend
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.SaveTokens = true;
-                options.GetClaimsFromUserInfoEndpoint = true;
                 options.TokenValidationParameters = new TokenValidationParameters() {
                     ValidateLifetime = true,
                 };
@@ -60,7 +57,19 @@ namespace VillajourFrontend
                 {
                     options.RequireHttpsMetadata = false;
                 }
+
+                options.Events = new OpenIdConnectEvents
+                {
+                    OnAccessDenied = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.Redirect("/");
+                        return Task.CompletedTask;
+                    },
+                };
             });
+
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
 

@@ -3,6 +3,7 @@
 @using Radzen
 @using Radzen.Blazor
 @using VillajourFrontend.Dto.Event
+@attribute [Authorize(Roles = "user")]
 
 @if (Event != null)
 {

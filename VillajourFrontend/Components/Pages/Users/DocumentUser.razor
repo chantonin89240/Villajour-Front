@@ -4,6 +4,7 @@
 @using Radzen.Blazor
 @using VillajourFrontend.Entity
 @using VillajourFrontend.Dto.Document
+@attribute [Authorize(Roles = "user")]
 
 <div class="documentTitle">
     <h1>Vos documents favoris</h1>
