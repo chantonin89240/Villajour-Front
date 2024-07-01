@@ -1,52 +1,92 @@
 ﻿@page "/AnnouncementUser"
-@inject HttpClient HttpClient
-@inject NavigationManager NavigationManager
-@inherits ComponentBase
 @using VillajourFrontend.Entity
 @using Radzen
 @using Radzen.Blazor
+@using VillajourFrontend.Dto.Announcement
 
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Favoris</h3>
-            <RadzenDataList  Data="@userFavorites" TItem="Announcement" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
-                <Template Context="announcement">
-                    <div class="row mb-3">
-                        <div class="col-md-9">
-                            <h4>@announcement.Title</h4>
-                            <p>@announcement.Description</p>
-                            <p><em>@announcement.Date.ToShortDateString()</em></p>
-                        </div>
-                        <div class="col-md-3 text-end">
-                            <RadzenButton Icon="info" Text="Voir détails" Click="@(() => ViewDetails(announcement.Id))" />
-                        </div>
-                    </div>
-
-
-                </Template>
-            </RadzenDataList>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Annonces des Mairies</h3>
-            <RadzenDataList Data="@mairieAnnouncements" TItem="Announcement" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
-                <Template Context="announcement">
-                    <div class="row mb-3">
-                        <div class="col-md-9">
-                            <h4>@announcement.Title</h4>
-                            <p>@announcement.Description</p>
-                            <p><em>@announcement.Date.ToShortDateString()</em></p>
-                        </div>
-                        <div class="col-md-3 text-end">
-                            <RadzenButton Icon="info" Text="Voir détails" Click="@(() => ViewDetails(announcement.Id))" />
-                        </div>
-                    </div>
-                    <hr />
-                </Template>
-            </RadzenDataList>
-        </div>
-    </div>
+<div class="AnnouncementTitle">
+    <h1>Vos annonces favoris</h1>
 </div>
+
+@if (annonceFav == null)
+{
+    <p>Aucune annonce favoris trouvé !</p>
+}
+else if (!annonceFav.Any())
+{
+    <p>Vous n'avez aucune annonce favoris.</p>
+}
+else
+{
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-md-12">
+                    <RadzenDataList Data="@annonceFav" TItem="AnnouncementDto" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+                    <Template Context="announcementEnt">
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <h4>@announcementEnt.Title</h4>
+                                <p>@announcementEnt.Description</p>
+                                <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
+                            </div>
+                            <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                            </div>
+                            <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                            </div>
+                        </div>
+                    </Template>
+                </RadzenDataList>
+            </div>
+        </div>
+    </div>
+}
+                                
+<div class="AnnouncementTitle">
+    <h1>Les annonces de vos mairies favoris</h1>
+</div>
+
+@if (annonceByMairieFav == null)
+{
+    <p>Vous n'avez pas de mairie favoris ou elle n'ont pas d'annonce !</p>
+}
+else if (!annonceByMairieFav.Any())
+{
+    <p>Vous n'avez pas de mairie favoris ou elle n'ont pas d'annonce !</p>
+}
+else
+{
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenDataList Data="@annonceByMairieFav" TItem="AnnouncementByMairieFavoriteDto" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+                    <Template Context="announcementEnt">
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <h4>@announcementEnt.Title</h4>
+                                <p>@announcementEnt.Description</p>
+                                <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
+                            </div>
+                            <div class="col-md-2 text-end" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                            </div>
+                            @if (announcementEnt.Favorite)
+                            {
+                                <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                    <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                    <RadzenButton Click="@(() => OnAddAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
+                                </div>
+                            }
+                        </div>
+                    </Template>
+                </RadzenDataList>
+            </div>
+        </div>
+    </div>
+}

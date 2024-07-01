@@ -5,7 +5,7 @@ using VillajourFrontend.Entity;
 
 namespace VillajourFrontend.Components.Pages.Mairie;
 
-public partial class AddAnnouncementMairie : ComponentBase
+public partial class UpdateAnnouncementMairie : ComponentBase
 {
     [Inject]
     protected HttpClient? HttpClient { get; set; }
@@ -16,9 +16,10 @@ public partial class AddAnnouncementMairie : ComponentBase
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
-    protected List<AnnouncementType> announcementTypeList = new List<AnnouncementType>();
+    [Parameter]
+    public AnnouncementDto? announcement { get; set; }
 
-    protected AddAnnouncementDto newAnnouncement = new AddAnnouncementDto();
+    protected List<AnnouncementType> announcementTypeList = new List<AnnouncementType>();
 
     protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
@@ -29,7 +30,7 @@ public partial class AddAnnouncementMairie : ComponentBase
 
     protected async Task LoadAnnouncementType()
     {
-        var apiUrl = "https://localhost:7205/Api/Announcement/GetAnnouncementType";
+        var apiUrl = "https://localhost:7205/Api/Event/GetEventType";
         try
         {
             var type = await HttpClient.GetFromJsonAsync<List<AnnouncementType>>(apiUrl);
@@ -37,30 +38,39 @@ public partial class AddAnnouncementMairie : ComponentBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du chargement des annonces : {ex.Message}");
+            Console.WriteLine($"Erreur lors du chargement des rendez-vous: {ex.Message}");
         }
     }
 
     protected async Task HandleValidSubmit()
     {
-        var apiUrl = "https://localhost:7205/Api/Announcement";
+        var apiUrl = "https://localhost:7205/Api/Event/" + announcement.Id;
         try
         {
-            newAnnouncement.MairieId = MairieGuid;
-            var response = await HttpClient.PostAsJsonAsync(apiUrl, newAnnouncement);
+            Announcement updateAnnouncement = new Announcement()
+            {
+                Id = announcement.Id,
+                Date = announcement.Date,
+                Description = announcement.Description,
+                Title = announcement.Title,
+                AnnouncementTypeId = announcement.AnnouncementType.Id,
+                MairieId = MairieGuid
+            };
+
+            var response = await HttpClient.PutAsJsonAsync(apiUrl, updateAnnouncement);
             if (response.IsSuccessStatusCode)
             {
                 DialogService.Close(true);
             }
             else
             {
-                Console.WriteLine($"Erreur lors de l'ajout de l'événement: {response.StatusCode}");
+                Console.WriteLine($"Erreur lors de la modification de l'annonce : {response.StatusCode}");
             }
         }
         catch (Exception ex)
         {
             // Gestion des erreurs du client
-            Console.WriteLine($"Erreur lors de l'ajout de l'événement : {ex.Message}");
+            Console.WriteLine($"Erreur lors de la modification de l'annonce : {ex.Message}");
         }
     }
 }

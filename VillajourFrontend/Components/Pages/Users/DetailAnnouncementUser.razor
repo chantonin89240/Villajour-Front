@@ -1,0 +1,20 @@
+﻿<!-- Pages/DetailAnnouncementUser.razor -->
+@page "/DetailAnnouncementUser"
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Dto.Event
+
+@if (Announcement != null)
+{
+    <p>Mairie : <br /> @Announcement.Mairie.Name</p>
+    <hr />
+    <p>Adresse : <br /> @Announcement.Mairie.Address</p>
+    <hr />
+    <p>Email : <br /> @Announcement.Mairie.Email</p>
+    <hr />
+    <p>Téléphone : <br /> @Announcement.Mairie.Phone</p>
+}
+else
+{
+    <p>Le détail de l'annonce n'a pas été trouvé</p>
+}

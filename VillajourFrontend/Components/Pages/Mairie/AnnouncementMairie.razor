@@ -1,69 +1,44 @@
 ﻿@page "/AnnouncementMairie"
-@inherits ComponentBase
-@using VillajourFrontend.Entity
+@using VillajourFrontend.Dto.Announcement
 @using Radzen
 @using Radzen.Blazor
 
-<h3>Annonces</h3>
+<div class="announcementTitle">
+    <h1>Vos annonces</h1>
+    <RadzenButton Text="Ajouter une annonce" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Click="@OnAddNewAnnouncement" />
+</div>
 
-<RadzenDataList Data="@models" TItem="Announcement" PageSize="10">
-    <Template Context="announcement">
-        <div class="row mb-3">
-            <div class="col-md-9">
-                <h4>@announcement.Title</h4>
-                <p>@announcement.Description</p>
-                <p><em>@announcement.Date.ToShortDateString()</em></p>
-            </div>
-            <div class="col-md-3 text-end">
-                <RadzenButton Icon="delete" Text="Supprimer" Click="@(() => DeleteAnnouncement(announcement.Id))" ButtonStyle="ButtonStyle.Danger" />
-                <RadzenButton Icon="info" Text="Voir détails" Click="@(() => ViewDetails(announcement.Id))" />
+@if (announcement == null)
+{
+    <p>Aucune annonce trouvé !</p>
+}
+else if (!announcement.Any())
+{
+    <p>Vous n'avez aucun annonce.</p>
+}
+else
+{
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenDataList Data="@announcement" TItem="AnnouncementDto" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+                    <Template Context="announcementEnt">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <h4>@announcementEnt.Title</h4>
+                                <p>@announcementEnt.Description</p>
+                                <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
+                            </div>
+                            <div class="col-md-3" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Text="Modifier" Click="@(() => OnUpdateAnnouncement(announcementEnt.Id))" Style="width: 100%" class="rz-background-color-warning-light" />
+                            </div>
+                            <div class="col-md-3" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Text="Supprimer" Click="@(() => OnDeleteAnnouncement(announcementEnt.Id))" Style="width: 100%" class="rz-background-color-danger-light" />
+                            </div>
+                        </div>
+                    </Template>
+                </RadzenDataList>
             </div>
         </div>
-        <hr />
-    </Template>
-</RadzenDataList>
-
-<RadzenButton Text="Nouvelle annonce" Click="AddAnnouncement" Class="adjust-btn" />
-
-<style>
-
-    body {
-        font-family: Arial, sans-serif;
-    }
-
-    .row {
-        display: flex;
-        align-items: center;
-    }
-
-    .col-md-1 {
-        flex: 0 0 auto;
-        width: 50px;
-        text-align: center;
-    }
-
-    .col-md-9 {
-        flex: 1 1 auto;
-        padding: 0 15px;
-    }
-
-    .col-md-2 {
-        flex: 0 0 auto;
-        width: 150px;
-    }
-
-    .text-end {
-        text-align: right;
-    }
-
-    hr {
-        border: 0;
-        border-top: 1px solid #ddd;
-        margin: 10px 0;
-    }
-
-    .mb-3 {
-        margin-bottom: 1rem !important;
-    }
-
-</style>
+    </div>
+}

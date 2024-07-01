@@ -31,7 +31,7 @@ public partial class EventMairie
 
     protected async Task LoadEvents()
     {
-        var apiUrl = $"https://localhost:7205/Api/Event/GetEventHistoByMairie/{mairieGuid}";
+        var apiUrl = $"Event/GetEventHistoByMairie/{mairieGuid}";
         try
         {
             var eventMairie = await HttpClient.GetFromJsonAsync<List<EventDto>>(apiUrl);
@@ -62,7 +62,7 @@ public partial class EventMairie
     // suppression d'un event
     protected async Task OnDeleteEvent(int id)
     {
-        var apiUrl = "https://localhost:7205/Api/Event/" + id;
+        var apiUrl = $"Event/{id}";
         try
         {
             var validation = await HttpClient.DeleteAsync(apiUrl);
@@ -86,7 +86,7 @@ public partial class EventMairie
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du chargement des documents : {ex.Message}");
+            Console.WriteLine($"Erreur lors du chargement des événements : {ex.Message}");
         }
     }
 
@@ -101,12 +101,12 @@ public partial class EventMairie
                 {"Event", eventEnt}
             };
 
-            var result = await DialogService.OpenAsync<UpdateEventMairie>("Détails de l'événement", parameters);
+            var result = await DialogService.OpenAsync<UpdateEventMairie>("Modification de l'événement", parameters);
 
             if (result != null && result)
             {
                 await LoadEvents();
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été ajouté", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été modifié", Duration = 10000 };
                 NotificationService.Notify(message);
             }
         }

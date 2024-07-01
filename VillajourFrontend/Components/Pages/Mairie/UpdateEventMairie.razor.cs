@@ -75,5 +75,4 @@ public partial class UpdateEventMairie : ComponentBase
             Console.WriteLine($"Erreur lors de la modification de l'événement : {ex.Message}");
         }
     }
-
 }

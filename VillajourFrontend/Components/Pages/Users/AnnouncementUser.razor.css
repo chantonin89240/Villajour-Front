@@ -1,0 +1,18 @@
+﻿.AnnouncementTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1em;
+}
+
+.product-title {
+    min-height: 72px;
+    background-color: var(--rz-secondary-lighter);
+}
+
+.price-badge {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 20px;
+    padding: 8px;
+}

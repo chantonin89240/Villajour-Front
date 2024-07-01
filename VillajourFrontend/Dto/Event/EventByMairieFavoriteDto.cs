@@ -10,7 +10,7 @@ public class EventByMairieFavoriteDto
     public string? Address { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
-    public DocumentType? EventType { get; set; }
+    public EventType? EventType { get; set; }
     public Mairie? Mairie { get; set; }
     public bool Favorite { get; set; }
 }
