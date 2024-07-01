@@ -4,6 +4,7 @@
 @using Radzen.Blazor
 @using VillajourFrontend.Entity
 @using VillajourFrontend.Dto.Document
+@attribute [Authorize(Roles = "user")]
 
 <div class="documentTitle">
     <h1>Les documents de la mairie truc</h1>

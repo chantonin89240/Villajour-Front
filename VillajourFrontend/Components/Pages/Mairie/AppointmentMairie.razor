@@ -3,6 +3,7 @@
 @using Radzen
 @using Radzen.Blazor
 @using VillajourFrontend.Entity
+@attribute [Authorize(Roles = "mairie")]
 
 <div class="appointments-container">
     <h3>Réservation des places</h3>

@@ -1,8 +1,18 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization;
+@using VillajourFrontend.Components.Pages.DetailMairieUsers
+@inject IHttpContextAccessor context
 
 <div class="page">
     <div class="sidebar">
-        <NavMenuDetailMairie />
+        @if (context.HttpContext.User.IsInRole("user"))
+        {
+            <NavMenuUser />
+        }
+        else if (context.HttpContext.User.IsInRole("mairie"))
+        {
+            <NavMenuMairie />
+        }
     </div>
 
     <main>

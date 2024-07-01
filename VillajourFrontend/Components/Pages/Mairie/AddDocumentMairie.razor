@@ -3,6 +3,7 @@
 @using Radzen
 @using Radzen.Blazor
 @using VillajourFrontend.Dto.Document
+@attribute [Authorize(Roles = "mairie")]
 
 <RadzenTemplateForm TItem="AddDocumentDto" Data="@newDocument" Submit="@HandleValidSubmit">
     <RadzenRow Gap="0">

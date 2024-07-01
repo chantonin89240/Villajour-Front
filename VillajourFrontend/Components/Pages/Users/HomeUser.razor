@@ -3,6 +3,7 @@
 @using VillajourFrontend.Entity
 @using Radzen
 @using Radzen.Blazor
+@attribute [Authorize(Roles = "user")]
 
 <div class="container">
     <h3>Recherche de Mairies</h3>

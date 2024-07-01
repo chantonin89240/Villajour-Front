@@ -1,8 +1,15 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@using VillajourFrontend.Components.Pages.Users;
+@using VillajourFrontend.Components.Pages.Mairie;
 
-<PageTitle>Home</PageTitle>
+@inject IHttpContextAccessor context
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
+@if (@context.HttpContext.User.IsInRole("user"))
+{
+    <HomeUser />
+}
+else if (@context.HttpContext.User.IsInRole("mairie"))
+{
+    <HomeMairie />
+}
