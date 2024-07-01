@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div class="mt-3">
+    <div class="mt-4 mb-4">
         <RadzenDataGrid Data="@filteredMairies" TItem="Mairie" AutoGenerateColumns="false">
             <Columns>
                 <RadzenDataGridColumn TItem="Mairie" Property="Address" Title="Adresse" />
@@ -26,40 +26,54 @@
             </Columns>
         </RadzenDataGrid>
     </div>
+</div>
 
-    <div class="mt-3">
-        <RadzenDataList Style="height:300px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@mairiesFav" TItem="MairieFavByUser" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
-            <Template Context="mairie">
-                <RadzenCard Style="width: 100%; padding: 0;">
-                    <RadzenRow Gap="0">
-                        <RadzenColumn Size="12" SizeLG="3" Class="rz-p-4 product-title">
-                            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(mairie.Mairie.Name)</RadzenText>
-                        </RadzenColumn>
-                        <RadzenColumn Size="12" SizeLG="7" Class="rz-p-4">
-                            <RadzenRow Gap="0">
-                                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
-                                    <RadzenText TextStyle="TextStyle.Body2">@(mairie.Mairie.Name)</RadzenText>
-                                </RadzenColumn>
-                                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type de document</RadzenText>
-                                    <RadzenText TextStyle="TextStyle.Body2">@(mairie.Mairie.Name)</RadzenText>
-                                </RadzenColumn>
-                                <RadzenColumn Size="12" SizeMD="12" SizeLG="6">
-                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Description</RadzenText>
-                                    <RadzenText TextStyle="TextStyle.Body2">@(mairie.Mairie.Name)</RadzenText>
-                                </RadzenColumn>
-                            </RadzenRow>
-                        </RadzenColumn>
-                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                            <RadzenButton Click="@(() => OnDeleteMairieFav(mairie.Mairie.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
-                        </RadzenColumn>
-                    </RadzenRow>
-                </RadzenCard>
-            </Template>
-        </RadzenDataList> 
-    </div>
-    
+<div class="container">
+    <h3>Vos mairies favoris</h3>
+
+    @if (mairiesFav == null)
+    {
+        <p>Aucune annonce favoris trouvé !</p>
+    }
+    else if (!mairiesFav.Any())
+    {
+        <p>Vous n'avez aucune annonce favoris.</p>
+    }
+    else
+    {
+        <div class="mt-4 mb-4">
+            <RadzenDataList Style="height:300px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@mairiesFav" TItem="Mairie" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+                <Template Context="mairie">
+                    <RadzenCard Style="width: 100%; padding: 0;">
+                        <RadzenRow Gap="0">
+                            <RadzenColumn Size="12" SizeLG="3" Class="rz-p-4 product-title">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(mairie.Name)</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeLG="7" Class="rz-p-4">
+                                <RadzenRow Gap="0">
+                                    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
+                                        <RadzenText TextStyle="TextStyle.Body2">@(mairie.Name)</RadzenText>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type de document</RadzenText>
+                                        <RadzenText TextStyle="TextStyle.Body2">@(mairie.Name)</RadzenText>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeMD="12" SizeLG="6">
+                                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Description</RadzenText>
+                                        <RadzenText TextStyle="TextStyle.Body2">@(mairie.Name)</RadzenText>
+                                    </RadzenColumn>
+                                </RadzenRow>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Click="@(() => OnDeleteMairieFav(mairie.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenCard>
+                </Template>
+            </RadzenDataList> 
+        </div>
+    }
 </div>
 
 

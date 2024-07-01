@@ -22,7 +22,7 @@ public partial class HomeUser
 
     List<VillajourFrontend.Entity.Mairie> mairies = new List<VillajourFrontend.Entity.Mairie>();
     List<VillajourFrontend.Entity.Mairie> filteredMairies = new List<VillajourFrontend.Entity.Mairie>();
-    List<MairieFavByUser> mairiesFav = new List<MairieFavByUser>();
+    List<VillajourFrontend.Entity.Mairie> mairiesFav = new List<VillajourFrontend.Entity.Mairie>();
     string searchQuery = "";
 
     protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
@@ -54,8 +54,8 @@ public partial class HomeUser
         var apiUrl = $"User/GetMairieFavByUser/{userGuid}";
         try
         {
-            var mairie = await HttpClient.GetFromJsonAsync<List<MairieFavByUser>>(apiUrl);
-            mairiesFav = mairie?.ToList() ?? new List<MairieFavByUser>();
+            var mairie = await HttpClient.GetFromJsonAsync<List<VillajourFrontend.Entity.Mairie>>(apiUrl);
+            mairiesFav = mairie?.ToList() ?? new List<VillajourFrontend.Entity.Mairie>();
             this.StateHasChanged();
         }
         catch (Exception ex)
