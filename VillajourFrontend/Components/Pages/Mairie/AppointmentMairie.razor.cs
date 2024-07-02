@@ -1,28 +1,27 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using Radzen.Blazor;
+using VillajourFrontend.Entity;
 using System.Net.Http;
 using System.Net.Http.Json;
-using VillajourFrontend.Entity;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using VillajourFrontend.Dto.Appointement;
+using Radzen.Blazor;
 
 namespace VillajourFrontend.Components.Pages.Mairie
 {
     public partial class AppointmentMairieBase : ComponentBase
     {
         [Inject]
-        protected HttpClient HttpClient { get; set; }
-
-        [Inject]
         protected DialogService DialogService { get; set; }
 
         [Inject]
-        protected NavigationManager NavigationManager { get; set; }
+        protected HttpClient HttpClient { get; set; }
 
-        protected RadzenScheduler<VillajourFrontend.Entity.Appointment> scheduler;
+        protected RadzenScheduler<Appointment> scheduler;
         protected List<Appointment> appointments = new List<Appointment>();
-        protected int UserId => 1;
-        protected int MairieId => 34;
-        protected bool IsMairie => true;
+        protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        protected Guid MairieId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
         protected override async Task OnInitializedAsync()
         {
@@ -31,11 +30,14 @@ namespace VillajourFrontend.Components.Pages.Mairie
 
         protected async Task LoadAppointments()
         {
-            var apiUrl = "https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Appointment";
+            var apiUrl = $"Appointments/GetAppointmentByMairie/{MairieId}";
             try
             {
                 var apiAppointments = await HttpClient.GetFromJsonAsync<List<Appointment>>(apiUrl);
-                appointments = apiAppointments?.ToList() ?? new List<VillajourFrontend.Entity.Appointment>();
+                if (apiAppointments != null)
+                {
+                    appointments = apiAppointments;
+                }
             }
             catch (Exception ex)
             {
@@ -43,164 +45,47 @@ namespace VillajourFrontend.Components.Pages.Mairie
             }
         }
 
-        protected async Task SubmitAppointment(VillajourFrontend.Entity.Appointment model)
+        protected async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
         {
-            var apiUrl = "https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Appointment";
-            var apiModel = new Appointment
-            {
-                Id = model.Id,
-                UserID = model.UserID,
-                MairieId = model.MairieId,
-                DateStart = model.DateStart,
-                DateEnd = model.DateEnd,
-                Title = model.Title,
-                Description = model.Description,
-                Validation = model.Validation,
-                AppointmentTypeId = model.AppointmentTypeId
-            };
+            var parameters = new Dictionary<string, object> { { "CurrentAppointment", args.Data }, { "Title", "Détails du rendez-vous" } };
+            var options = new DialogOptions() { Width = "700px", Height = "450px" };
+            var result = await DialogService.OpenAsync<AppointmentForm>("", parameters, options);
 
-            try
+            if (result != null)
             {
-                HttpResponseMessage response;
-                if (model.Id == null)
+                var index = appointments.FindIndex(a => a.Id == result.Id);
+                if (index != -1)
                 {
-                    response = await HttpClient.PostAsJsonAsync(apiUrl, apiModel);
+                    appointments[index] = result;
+                    await scheduler.Reload();
                 }
-                else
-                {
-                    response = await HttpClient.PutAsJsonAsync($"{apiUrl}/{model.Id}", apiModel);
-                }
-                response.EnsureSuccessStatusCode();
             }
-            catch (Exception ex)
+            else if (result == null)
             {
-                Console.WriteLine($"Erreur lors de l'envoi de rendez-vous: {ex.Message}");
+                appointments.Remove(args.Data);
+                await scheduler.Reload();
             }
-        }
-
-        protected void OnSlotRender(SchedulerSlotRenderEventArgs args)
-        {
-            if (args.Start < DateTime.Now)
-            {
-                args.Attributes["style"] = "background-color: #d3d3d3; color: #a9a9a9;";
-            }
-
-            // var start = TimeOnly.FromDateTime(args.Start);
-            // var end = TimeOnly.FromDateTime(args.End);
-            // bool isValidSlot = (start >= morningStart && start < morningEnd) || (start >= afternoonStart && start < afternoonEnd);
-
-            // if (!isValidSlot && args.View.Text != "Month")
-            // {
-            //     args.Attributes["style"] = "background-color: #d3d3d3; color: #a9a9a9;";
-            // }
         }
 
         protected async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
         {
-            // var start = TimeOnly.FromDateTime(args.Start);
-            // var end = TimeOnly.FromDateTime(args.End);
-            // bool isValidSlot = (start >= morningStart && end <= morningEnd) || (start >= afternoonStart && end <= afternoonEnd);
-
-            // if (args.Start >= DateTime.Now && args.View.Text != "Year" && (isValidSlot || args.View.Text == "Month"))
-            if (args.Start >= DateTime.Now && args.View.Text != "Year")
+            var newAppointment = new Appointment
             {
-                var parameters = new Dictionary<string, object>
-                {
-                    { "Start", args.Start },
-                    { "End", args.End }
-                };
-                var data = await DialogService.OpenAsync<AppointmentForm>("Prendre un rendez-vous", parameters);
-
-                if (data != null)
-                {
-                    data.UserID = UserId;
-                    data.MairieId = MairieId;
-                    data.Validation = false;
-
-                    appointments.Add(data);
-                    await SubmitAppointment(data);
-                    await scheduler.Reload();
-                }
-            }
-        }
-
-        protected async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<VillajourFrontend.Entity.Appointment> args)
-        {
-            var parameters = new Dictionary<string, object> { { "CurrentAppointment", args.Data } };
-            var result = await DialogService.OpenAsync<AppointmentForm>("Détails du rendez-vous", parameters);
-
-            if (result != null)
-            {
-                if (result.Validation)
-                {
-                    var index = appointments.FindIndex(a => a.Id == result.Id);
-                    if (index != -1)
-                    {
-                        appointments[index] = result;
-                        await SubmitAppointment(result);
-                        await scheduler.Reload();
-                    }
-                }
-                else if (result == null)
-                {
-                    appointments.Remove(args.Data);
-                    await scheduler.Reload();
-                }
-            }
-        }
-
-        protected void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<VillajourFrontend.Entity.Appointment> args)
-        {
-            if (!args.Data.Validation)
-            {
-                args.Attributes["style"] = "background: red";
-                args.Attributes["title"] = "Non validé";
-            }
-            else
-            {
-                args.Attributes["style"] = "background: green";
-                args.Attributes["title"] = "Validé";
-            }
-        }
-
-        protected async Task OnAppointmentMove(SchedulerAppointmentMoveEventArgs args)
-        {
-            var draggedAppointment = appointments.FirstOrDefault(x => x == args.Appointment.Data);
-            if (draggedAppointment != null)
-            {
-                draggedAppointment.DateStart += args.TimeSpan;
-                draggedAppointment.DateEnd += args.TimeSpan;
-                await SubmitAppointment(draggedAppointment);
-                await scheduler.Reload();
-            }
-        }
-
-        protected async Task AdjustSlots()
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                // { "MorningStart", morningStart },
-                // { "MorningEnd", morningEnd },
-                // { "AfternoonStart", afternoonStart },
-                // { "AfternoonEnd", afternoonEnd }
+                StartTime = args.Start,
+                EndTime = args.End,
+                UserId = UserId,
+                MairieId = MairieId
             };
-            var result = await DialogService.OpenAsync<SlotAdjustmentForm>("Ajuster les plages d'horaires", parameters);
+
+            var parameters = new Dictionary<string, object> { { "CurrentAppointment", newAppointment }, { "Title", "Nouveau Rendez-vous" } };
+            var options = new DialogOptions() { Width = "700px", Height = "450px" };
+            var result = await DialogService.OpenAsync<AppointmentForm>("", parameters, options);
 
             if (result != null)
             {
-                // morningStart = result.MorningStart;
-                // morningEnd = result.MorningEnd;
-                // afternoonStart = result.AfternoonStart;
-                // afternoonEnd = result.AfternoonEnd;
+                appointments.Add(result);
                 await scheduler.Reload();
             }
-        }
-
-        protected async Task ValidateAppointment(VillajourFrontend.Entity.Appointment appointment)
-        {
-            appointment.Validation = true;
-            await SubmitAppointment(appointment);
-            await scheduler.Reload();
         }
     }
 }

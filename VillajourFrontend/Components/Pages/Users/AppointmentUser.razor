@@ -1,6 +1,55 @@
 ﻿@page "/AppointmentUser"
 @attribute [Authorize(Roles = "user")]
+@inherits AppointmentUserBase
+@using Radzen
+@using Radzen.Blazor
+@using VillajourFrontend.Dto.Appointement
 
-<h3>AppointmentUser</h3>
+<div class="appointments-container">
+    <h2>Rendez-vous futurs</h2>
+    <RadzenDataGrid TItem="AppointmentDTO" Data="@FutureAppointments" ShowPagingSummary="true" PageSize="10" Style="width: 100%;" class="appointment-grid">
+        <Columns>
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="Title" Title="Titre" />
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="Description" Title="Description" />
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="StartTime" Title="Début" FormatString="{0:dd/MM/yyyy HH:mm}" />
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="EndTime" Title="Fin" FormatString="{0:dd/MM/yyyy HH:mm}" />
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="AppointmentTypeLibelle" Title="Type" />
+        </Columns>
+    </RadzenDataGrid>
 
+    <h2 class="appointment-section">Rendez-vous passés</h2>
+    <RadzenDataGrid TItem="AppointmentDTO" Data="@PastAppointments" ShowPagingSummary="true" PageSize="10" Style="width: 100%;">
+        <Columns>
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="Title" Title="Titre" />
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="Description" Title="Description" />
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="StartTime" Title="Début" FormatString="{0:dd/MM/yyyy HH:mm}" />
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="EndTime" Title="Fin" FormatString="{0:dd/MM/yyyy HH:mm}" />
+            <RadzenDataGridColumn TItem="AppointmentDTO" Property="AppointmentTypeLibelle" Title="Type" />
+        </Columns>
+    </RadzenDataGrid>
+</div>
 
+<RadzenNotification />
+
+<style>
+    .appointments-container {
+        width: 100%;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .appointments-container h2 {
+            margin-bottom: 20px;
+        }
+
+    .appointment-grid {
+        margin-bottom: 40px;
+    }
+
+    .appointment-section {
+        margin-top: 40px;
+    }
+</style>
+ 

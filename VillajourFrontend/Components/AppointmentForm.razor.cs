@@ -4,6 +4,8 @@ using VillajourFrontend.Entity;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using VillajourFrontend.Dto.Appointement;
 
 namespace VillajourFrontend.Components
 {
@@ -16,58 +18,93 @@ namespace VillajourFrontend.Components
         protected HttpClient HttpClient { get; set; }
 
         [Parameter]
-        public VillajourFrontend.Entity.Appointment CurrentAppointment { get; set; }
+        public Appointment CurrentAppointment { get; set; }
 
         [Parameter]
-        public DateTime Start { get; set; }
+        public string Title { get; set; }
 
-        [Parameter]
-        public DateTime End { get; set; }
+        protected Appointment model = new Appointment();
+        protected List<AppointmentTypeDTO> appointmentTypes = new List<AppointmentTypeDTO>();
 
-        protected VillajourFrontend.Entity.Appointment model = new VillajourFrontend.Entity.Appointment();
+        protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        protected Guid MairieId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
-        protected override void OnParametersSet()
+        protected override async Task OnInitializedAsync()
         {
+            await LoadAppointmentTypes();
             if (CurrentAppointment != null)
             {
                 model = CurrentAppointment;
             }
-            else
+        }
+
+        protected async Task LoadAppointmentTypes()
+        {
+            var apiUrl = "Appointments/GetAppointmentType";
+            try
             {
-                model.DateStart = Start;
-                model.DateEnd = End;
+                var types = await HttpClient.GetFromJsonAsync<List<AppointmentTypeDTO>>(apiUrl);
+                appointmentTypes = types ?? new List<AppointmentTypeDTO>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors du chargement des types de rendez-vous: {ex.Message}");
             }
         }
 
-        protected void OnSubmit()
+        protected async Task OnSubmit()
         {
-            if (!string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(model.Title))
             {
+                return;
+            }
+
+            model.UserId = UserId;
+            model.MairieId = MairieId;
+            model.Statut = "en cours";
+
+            var apiUrl = model.Id == 0 ? "Appointments" : $"Appointments/{model.Id}";
+            Console.WriteLine($"API URL: {apiUrl}");
+
+            try
+            {
+                HttpResponseMessage response;
+                if (model.Id == 0)
+                {
+                    response = await HttpClient.PostAsJsonAsync(apiUrl, model);
+                }
+                else
+                {
+                    response = await HttpClient.PutAsJsonAsync(apiUrl, model);
+                }
+                response.EnsureSuccessStatusCode();
                 DialogService.Close(model);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de la gestion du rendez-vous: {ex.Message}");
+            }
         }
 
-        protected void ValidateAppointment()
-        {
-            model.Validation = true;
-            DialogService.Close(model);
-        }
 
         protected async Task RefuseAppointment()
         {
-            if (model.Id != "0")
+            if (model.Id == 0)
             {
-                var apiUrl = $"https://664da1f7ede9a2b5565433c5.mockapi.io/api/Appointment/v1/Appointment/{model.Id}";
-                var response = await HttpClient.DeleteAsync(apiUrl);
-                response.EnsureSuccessStatusCode();
-            }
-            DialogService.Close(null);
-        }
+                DialogService.Close(null);
+            };
+            var apiUrl = $"Appointments/{model.Id}";
 
-        protected void CancelAppointment()
-        {
-            model.Validation = false;
-            DialogService.Close(model);
+            try
+            {
+                var response = await HttpClient.PutAsJsonAsync(apiUrl, model);
+                response.EnsureSuccessStatusCode();
+                DialogService.Close(null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de la mise à jour du statut du rendez-vous: {ex.Message}");
+            }
         }
     }
 }

@@ -7,29 +7,30 @@
 
 <div class="appointments-container">
     <h3>Réservation des places</h3>
-    <RadzenScheduler @ref="scheduler" style="height: 768px;" TItem="VillajourFrontend.Entity.Appointment" Data="appointments"
-                     StartProperty="DateStart" EndProperty="DateEnd" TextProperty="Title" SelectedIndex="2"
-                     SlotSelect="OnSlotSelect" AppointmentSelect="OnAppointmentSelect"
-                     AppointmentRender="OnAppointmentRender" SlotRender="OnSlotRender"
-                     AppointmentMove="OnAppointmentMove">
+    <RadzenScheduler style="height: 575px;" @ref="scheduler" TItem="Appointment" Data="appointments"
+                     StartProperty="StartTime" EndProperty="EndTime" TextProperty="Title"
+                     AppointmentSelect="OnAppointmentSelect"
+                     SlotSelect="OnSlotSelect">
         <RadzenDayView />
         <RadzenWeekView />
         <RadzenMonthView />
     </RadzenScheduler>
-
-    <RadzenButton Text="Ajuster les plages d'horaires" Click="AdjustSlots" Class="adjust-btn" />
+    <RadzenButton Text="Ajuster les plages d'horaires" Class="adjust-btn" />
 </div>
 
 <RadzenNotification />
 
 <style>
     .appointments-container {
-        max-width: 800px;
+        width : 100%;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 20px;
         background-color: #fff;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-height : 800px;
+        height : 100%;
     }
 
         .appointments-container h3 {
@@ -46,4 +47,11 @@
         margin-top: 20px;
         display: block;
     }
+
+    .dialog-title-center {
+        text-align: center;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
 </style>
