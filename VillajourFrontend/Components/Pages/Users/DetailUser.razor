@@ -4,7 +4,7 @@
 <RadzenPanel>
     <HeaderTemplate>
         <div>
-            <h3>Profil utilisateur</h3>
+            <h3>Votre profil</h3>
         </div>
         <div>
             <RadzenImage class="profil-picture" src=@model.Picture alt="Photo de Profil" />
@@ -14,8 +14,8 @@
         <RadzenTemplateForm Style="margin-top:5%;" TItem=Entity.User Data=@model Submit="@(args => ModifyUser(model))">
             <div style="width:80%">
                 <div class="ligne">
-                    <RadzenText class="details-title">Nom : </RadzenText>
-                    <RadzenTextBox Disabled="@NotModificationMode" class="details-data" Value="DELARUE"></RadzenTextBox>
+                    <RadzenText class="details-title">E-mail : </RadzenText>
+                    <RadzenTextBox Disabled="@NotModificationMode" class="details-data" @bind-value="@model.Email"></RadzenTextBox>
                 </div>
                 <div class="ligne">
                     <RadzenText class="details-title">Numéro de téléphone : </RadzenText>

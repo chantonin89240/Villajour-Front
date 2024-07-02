@@ -1,65 +1,66 @@
 ﻿<!-- Pages/DocumentDetailMairie.razor -->
-@page "/DocumentDetailMairie"
+@page "/DocumentDetailMairie/{idMairie:guid}"
 @using Radzen
 @using Radzen.Blazor
 @using VillajourFrontend.Entity
 @using VillajourFrontend.Dto.Document
 @attribute [Authorize(Roles = "user")]
+@using VillajourFrontend.Components.Layout
 
-<div class="documentTitle">
-    <h1>Les documents de la mairie truc</h1>
+<NavMenuDetailMairie IdMairie="@idMairie" />
+
+<div class="listeContenu">
+    @if (documentsDetail == null)
+    {
+        <p>La mairie n'a pas de documents !</p>
+    }
+    else if (!documentsDetail.Any())
+    {
+        <p>La mairie n'a pas de documents !</p>
+    }
+    else
+    {
+        <RadzenDataList Style="height:600px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@documentsDetail" TItem="DocumentByMairieDetailDto" PageSize="4" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+            <Template Context="Document">
+                <RadzenCard Style="width: 100%; padding: 0;">
+                    <RadzenRow Gap="0">
+                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
+                            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(Document.Title)</RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
+                            <RadzenRow Gap="0">
+                                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body2">@(Document.Date)</RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type de document</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body2">@(Document.DocumentType.Libelle)</RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="12" SizeLG="6">
+                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Description</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body2">@(Document.Description)</RadzenText>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenButton Text="Télécharger" title="Télécharger le document" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%" class="rz-background-color-success-light" />
+                        </RadzenColumn>
+                        @if (Document.Favorite)
+                        {
+                            <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Click="@(() => OnDeleteDocumentFav(Document.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                            </RadzenColumn>
+                        }
+                        else
+                        {
+                            <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Click="@(() => OnAddDocumentFav(Document.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
+                            </RadzenColumn>
+                        }
+                    </RadzenRow>
+                </RadzenCard>
+            </Template>
+        </RadzenDataList>
+    }
 </div>
-
-@if (documentsDetail == null)
-{
-    <p>La mairie n'a pas de documents !</p>
-}
-else if (!documentsDetail.Any())
-{
-    <p>La mairie n'a pas de documents !</p>
-}
-else
-{
-    <RadzenDataList Style="height:600px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@documentsDetail" TItem="DocumentByMairieDetailDto" PageSize="4" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
-        <Template Context="Document">
-            <RadzenCard Style="width: 100%; padding: 0;">
-                <RadzenRow Gap="0">
-                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(Document.Title)</RadzenText>
-                    </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
-                        <RadzenRow Gap="0">
-                            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(Document.Date)</RadzenText>
-                            </RadzenColumn>
-                            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type de document</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(Document.DocumentType.Libelle)</RadzenText>
-                            </RadzenColumn>
-                            <RadzenColumn Size="12" SizeMD="12" SizeLG="6">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Description</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(Document.Description)</RadzenText>
-                            </RadzenColumn>
-                        </RadzenRow>
-                    </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                        <RadzenButton Text="Télécharger" title="Télécharger le document" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%" class="rz-background-color-success-light" />
-                    </RadzenColumn>
-                    @if (Document.Favorite)
-                    {
-                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                            <RadzenButton Click="@(() => OnDeleteDocumentFav(Document.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
-                        </RadzenColumn>
-                    }
-                    else
-                    {
-                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                            <RadzenButton Click="@(() => OnAddDocumentFav(Document.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
-                        </RadzenColumn>
-                    }
-                </RadzenRow>
-            </RadzenCard>
-        </Template>
-    </RadzenDataList>
-}

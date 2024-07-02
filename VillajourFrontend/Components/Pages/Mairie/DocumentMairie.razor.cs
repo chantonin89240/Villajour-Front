@@ -58,7 +58,7 @@ public partial class DocumentMairie
         if (result != null && result)
         {
             await LoadDocuments();
-            NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été ajouté", Duration = 10000 };
+            NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été ajouté", Duration = 4000 };
             NotificationService.Notify(message);
         }
     }
@@ -75,14 +75,14 @@ public partial class DocumentMairie
             {
                 await LoadDocuments();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadDocuments();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été supprimé", Duration = 4000 };
                 NotificationService.Notify(message);
 
                 

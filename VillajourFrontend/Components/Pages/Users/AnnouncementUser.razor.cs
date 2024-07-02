@@ -92,7 +92,7 @@ public partial class AnnouncementUser
                 await LoadAnnouncementFav();
                 await LoadAnnouncementFavMairie();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été ajouté à vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été ajouté à vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
@@ -100,7 +100,7 @@ public partial class AnnouncementUser
                 await LoadAnnouncementFav();
                 await LoadAnnouncementFavMairie();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été ajouté", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été ajouté", Duration = 4000 };
                 NotificationService.Notify(message);
 
 
@@ -138,7 +138,7 @@ public partial class AnnouncementUser
                 await LoadAnnouncementFav();
                 await LoadAnnouncementFavMairie();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été supprimé de vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été supprimé de vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
@@ -146,7 +146,7 @@ public partial class AnnouncementUser
                 await LoadAnnouncementFav();
                 await LoadAnnouncementFavMairie();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été supprimé", Duration = 4000 };
                 NotificationService.Notify(message);
 
 

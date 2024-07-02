@@ -54,7 +54,7 @@ public partial class EventMairie
         if (result != null && result)
         {
             await LoadEvents();
-            NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été ajouté", Duration = 10000 };
+            NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été ajouté", Duration = 4000 };
             NotificationService.Notify(message);
         }
     }
@@ -71,14 +71,14 @@ public partial class EventMairie
             {
                 await LoadEvents();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été supprimé", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadEvents();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'événement n'a pas été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'événement n'a pas été supprimé", Duration = 4000 };
                 NotificationService.Notify(message);
 
 
@@ -106,7 +106,7 @@ public partial class EventMairie
             if (result != null && result)
             {
                 await LoadEvents();
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été modifié", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été modifié", Duration = 4000 };
                 NotificationService.Notify(message);
             }
         }

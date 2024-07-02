@@ -1,6 +1,75 @@
-﻿@page "/HomeDetailMairie"
+﻿@page "/HomeDetailMairie/{idMairie:guid}"
 @attribute [Authorize(Roles = "user")]
+@using VillajourFrontend.Components.Layout
+@using VillajourFrontend.Dto
 
-<h3>HomeDetailMairie</h3>
+<NavMenuDetailMairie IdMairie="@idMairie" />
 
+ <RadzenRow class="ContenuProfil">
+    @if (detailMairie.Favorite)
+    {
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4" style="display: flex; justify-content: right; align-items: center;">
+            <RadzenButton Click="@(() => OnDeleteMairieFav(detailMairie.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+        </RadzenColumn>
+    }
+    else
+    {
+        <RadzenColumn Size="12" SizeLG="12" Class="rz-p-4" style="display: flex; justify-content: right; align-items: center;">
+            <RadzenButton Click="@(() => OnAddMairieFav(detailMairie.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
+        </RadzenColumn>
+    }
+ </RadzenRow>
 
+<RadzenPanel class="HeaderProfil">
+    <HeaderTemplate>
+        <div>
+            <h3>Profil de la @detailMairie.Name</h3>
+        </div>
+        <div>
+            <RadzenImage class="profil-picture" src=@detailMairie.Picture alt="Photo de Profil" />
+        </div>
+    </HeaderTemplate>
+    <ChildContent>
+        <RadzenRow class="ContenuProfil">
+            <RadzenColumn Size="3">
+                <p class="titreContenu">Adresse</p>
+                <p>@detailMairie.Address</p>
+            </RadzenColumn>
+            <RadzenColumn Size="3">
+                <p class="titreContenu">Siret</p>
+                <p>@detailMairie.Siret</p>
+            </RadzenColumn>
+            <RadzenColumn Size="3">
+                <p class="titreContenu">Téléphone</p>
+                <p>@detailMairie.Phone</p>
+            </RadzenColumn>
+            <RadzenColumn Size="3">
+                <p class="titreContenu">E-mail</p>
+                <p>@detailMairie.Email</p>
+            </RadzenColumn>
+        </RadzenRow>
+    </ChildContent>
+</RadzenPanel>
+
+<style>
+    .HeaderProfil{
+        margin-top: 3em;
+        margin-bottom: 3em;
+    }
+    .ContenuProfil{
+        margin-top: 3em;
+        margin-bottom: 3em;
+        text-align: center;
+    }
+    .profil-picture {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ccc;
+    }
+
+    .titreContenu{
+        color: red;
+    }
+</style>

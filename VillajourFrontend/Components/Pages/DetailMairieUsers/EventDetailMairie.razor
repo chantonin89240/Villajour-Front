@@ -1,65 +1,66 @@
 ﻿<!-- Pages/EventDetailMairie.razor -->
-@page "/EventDetailMairie"
+@page "/EventDetailMairie/{idMairie:guid}"
 @using Radzen
 @using Radzen.Blazor
 @using VillajourFrontend.Entity
 @using VillajourFrontend.Dto.Event
 @attribute [Authorize(Roles = "user")]
+@using VillajourFrontend.Components.Layout
 
-<div class="eventTitle">
-    <h1>Les événements de la mairie truc</h1>
+<NavMenuDetailMairie IdMairie="@idMairie" />
+
+<div class="listeContenu">
+    @if (eventsDetail == null)
+    {
+        <p>La mairie n'a pas d'événements !</p>
+    }
+    else if (!eventsDetail.Any())
+    {
+        <p>La mairie n'a pas d'événement !</p>
+    }
+    else
+    {
+        <RadzenDataList Style="height:550px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@eventsDetail" TItem="EventByMairieDetailDto" PageSize="4" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+            <Template Context="eventEnt">
+                <RadzenCard Style="width: 100%; padding: 0;">
+                    <RadzenRow Gap="0">
+                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
+                            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(eventEnt.Title)</RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeLG="5" Class="rz-p-4">
+                            <RadzenRow Gap="0">
+                                <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date et horaire de début</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.StartTime)</RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date et horaire de fin</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.EndTime)</RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+                                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type d'événement</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.EventType.Libelle)</RadzenText>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenColumn>
+                        <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                        </RadzenColumn>
+                        @if (eventEnt.Favorite)
+                        {
+                            <RadzenColumn Size="6" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Click="@(() => OnDeleteEventFav(eventEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                            </RadzenColumn>
+                        }
+                        else
+                        {
+                            <RadzenColumn Size="6" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                                <RadzenButton Click="@(() => OnAddEventFav(eventEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
+                            </RadzenColumn>
+                        }
+                    </RadzenRow>
+                </RadzenCard>
+            </Template>
+        </RadzenDataList>
+    }
 </div>
-
-@if (eventsDetail == null)
-{
-    <p>La mairie n'a pas d'événements !</p>
-}
-else if (!eventsDetail.Any())
-{
-    <p>La mairie n'a pas d'événement !</p>
-}
-else
-{
-    <RadzenDataList Style="height:500px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@eventsDetail" TItem="EventByMairieDetailDto" PageSize="3" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
-        <Template Context="eventEnt">
-            <RadzenCard Style="width: 100%; padding: 0;">
-                <RadzenRow Gap="0">
-                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(eventEnt.Title)</RadzenText>
-                    </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="5" Class="rz-p-4">
-                        <RadzenRow Gap="0">
-                            <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date et horaire de début</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.StartTime)</RadzenText>
-                            </RadzenColumn>
-                            <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date et horaire de fin</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.EndTime)</RadzenText>
-                            </RadzenColumn>
-                            <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type d'événement</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(eventEnt.EventType.Libelle)</RadzenText>
-                            </RadzenColumn>
-                        </RadzenRow>
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                        <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
-                    </RadzenColumn>
-                    @if (eventEnt.Favorite)
-                    {
-                        <RadzenColumn Size="6" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                            <RadzenButton Click="@(() => OnDeleteEventFav(eventEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
-                        </RadzenColumn>
-                    }
-                    else
-                    {
-                        <RadzenColumn Size="6" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                            <RadzenButton Click="@(() => OnAddEventFav(eventEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
-                        </RadzenColumn>
-                    }
-                </RadzenRow>
-            </RadzenCard>
-        </Template>
-    </RadzenDataList>
-}

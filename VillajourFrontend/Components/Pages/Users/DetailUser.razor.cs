@@ -1,62 +1,60 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
-using System;
-using static System.Net.WebRequestMethods;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using VillajourFrontend.Entity;
 
-namespace VillajourFrontend.Components.Pages.Users
+namespace VillajourFrontend.Components.Pages.Users;
+
+public partial class DetailUser : ComponentBase
 {
-    public partial class DetailUser : ComponentBase
+    [Inject]
+    protected HttpClient? HttpClient { get; set; }
+
+    [Inject]
+    protected DialogService? DialogService { get; set; }
+
+    [Inject]
+    protected NavigationManager? NavigationManager { get; set; }
+
+    [Inject]
+    protected NotificationService? NotificationService { get; set; }
+
+    protected User model = new User();
+
+    protected RadzenScheduler<User>? scheduler;
+
+    protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    protected bool IsUser => true;
+
+    protected bool NotModificationMode;
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        protected HttpClient HttpClient { get; set; }
+        NotModificationMode = true;
+        await LoadUser();
+    }
 
-        [Inject]
-        protected DialogService DialogService { get; set; }
-
-        [Inject]
-        protected NavigationManager NavigationManager { get; set; }
-
-        [Inject]
-        protected NotificationService NotificationService { get; set; }
-
-        protected Entity.User model = new();
-
-
-        protected RadzenScheduler<Entity.User> scheduler;
-        protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        protected bool IsUser => true;
-
-        protected bool NotModificationMode;
-
-        protected override async Task OnInitializedAsync()
+    protected async Task LoadUser()
+    {
+        var apiUrl = "User/" + UserId;
+        try
         {
-            NotModificationMode = true;
-            await LoadUser();
-        }
+            var apiUser = await HttpClient.GetFromJsonAsync<User>(apiUrl);
 
-        protected async Task LoadUser()
-        {
-            var apiUrl = "User/" + UserId;
-            try
+            if (apiUser != null)
             {
-                var apiUser = await HttpClient.GetFromJsonAsync<Entity.User>(apiUrl);
-
-                if (apiUser != null)
-                {
-                    model = apiUser;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erreur lors du chargement de la user: {ex.Message}");
+                model = apiUser;
             }
         }
-
-        protected async Task PopupDeleteAccount()
+        catch (Exception ex)
         {
-            var result = await DialogService.OpenAsync<DeleteAccount>("Suppression du compte");
+            Console.WriteLine($"Erreur lors du chargement de la user: {ex.Message}");
+        }
+    }
+
+    protected async Task PopupDeleteAccount()
+    {
+        var result = await DialogService.OpenAsync<DeleteAccount>("Suppression du compte");
 
             if (result != null)
             {
@@ -68,55 +66,69 @@ namespace VillajourFrontend.Components.Pages.Users
         {
             var result = await DialogService.OpenAsync<Contact>("Nous contacter");
 
-            if (result != null)
-            {
-                await scheduler.Reload();
-            }
-        }
-
-        protected async Task ModifyUser(VillajourFrontend.Entity.User model)
+        if (result != null)
         {
-            var apiUrl = "/User";
-            var apiModel = new Entity.User
+            await scheduler.Reload();
+        }
+    }
+
+    protected async Task ModifyUser(User model)
+    {
+        try
+        {
+            var apiUrl = "User/" + model.Id;
+
+            var apiModel = new User
             {
                 Id = UserId,
                 Phone = model.Phone,
                 Picture = model.Picture,
+                Email = model.Email,
             };
 
-            try
+            var response = await HttpClient.PutAsJsonAsync(apiUrl, apiModel);
+
+            if (response.IsSuccessStatusCode)
             {
-                HttpResponseMessage response;
+                NotModificationMode = true;
+
+                NotificationService.Notify(new NotificationMessage
                 {
-                    response = await HttpClient.PutAsJsonAsync($"{apiUrl}/{UserId}", apiModel);
-                }
-                response.EnsureSuccessStatusCode();
+                    Severity = NotificationSeverity.Success,
+                    Duration = 4000,
+                    Summary = "Modifications enregistrées avec succès",
+                    Detail = ""
+                });
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erreur lors de la modification de la user: {ex.Message}");
+                NotModificationMode = true;
+
+                NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Warning,
+                    Duration = 4000,
+                    Summary = "La modification a échouer",
+                    Detail = ""
+                });
+                Console.WriteLine($"Erreur lors de la modification du profil : {response.StatusCode}");
             }
-
-            NotModificationMode = true;
-
-            NotificationService.Notify(new NotificationMessage
-            {
-                Severity = NotificationSeverity.Success,
-                Duration = 4000,
-                Summary = "Modifications enregistrées avec succès",
-                Detail = ""
-            });
         }
-
-        protected void EnterModificationMode()
+        catch (Exception ex)
         {
-            NotModificationMode = false;
+            // Gestion des erreurs du client
+            Console.WriteLine($"Erreur lors de la modification du profil : {ex.Message}");
         }
+    }
 
-        protected async Task ExitModificationMode()
-        {
-            NotModificationMode = true;
-            await LoadUser();
-        }
+    protected void EnterModificationMode()
+    {
+        NotModificationMode = false;
+    }
+
+    protected async Task ExitModificationMode()
+    {
+        NotModificationMode = true;
+        await LoadUser();
     }
 }

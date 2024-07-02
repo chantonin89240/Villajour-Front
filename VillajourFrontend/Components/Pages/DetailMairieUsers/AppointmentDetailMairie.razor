@@ -1,8 +1,11 @@
-﻿@page "/AppointmentDetailMairie"
+﻿@page "/AppointmentDetailMairie/{idMairie:guid}"
 @attribute [Authorize(Roles = "user")]
 @using Radzen
 @using Radzen.Blazor
 @using System.Globalization
+@using VillajourFrontend.Components.Layout
+
+<NavMenuDetailMairie IdMairie="@idMairie" />
 
 <h3>Disponibilités des créneaux</h3>
 
@@ -62,3 +65,4 @@
             cursor: not-allowed;
         }
 </style>
+

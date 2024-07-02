@@ -1,50 +1,51 @@
-﻿@page "/AnnouncementDetailMairie"
+﻿@page "/AnnouncementDetailMairie/{idMairie:guid}"
 @using Radzen
 @using Radzen.Blazor
 @using VillajourFrontend.Dto.Announcement
 @attribute [Authorize(Roles = "user")]
+@using VillajourFrontend.Components.Layout
 
-<div class="AnnouncementTitle">
-    <h1>Annonces de la mairie</h1>
-</div>
+<NavMenuDetailMairie IdMairie="@idMairie" />
 
-@if (announcementDetail == null)
-{
-    <p>La mairie n'a pas d'annonce !</p>
-}
-else if (!announcementDetail.Any())
-{
-    <p>La mairie n'a pas d'annonce !</p>
-}
-else
-{
-    <div class="container mt-4 mb-4">
-        <div class="row">
-            <div class="col-md-12">
-                <RadzenDataList Data="@announcementDetail" TItem="AnnouncementByMairieDetailDto" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
-                    <Template Context="announcementEnt">
-                        <div class="row mb-3">
-                            <div class="col-md-10">
-                                <h4>@announcementEnt.Title</h4>
-                                <p>@announcementEnt.Description</p>
-                                <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
+<div class="listeContenu">
+    @if (announcementDetail == null)
+    {
+        <p>La mairie n'a pas d'annonce !</p>
+    }
+    else if (!announcementDetail.Any())
+    {
+        <p>La mairie n'a pas d'annonce !</p>
+    }
+    else
+    {
+        <div class="container mt-4 mb-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <RadzenDataList Data="@announcementDetail" TItem="AnnouncementByMairieDetailDto" AllowPaging="true" PageSize="3" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+                        <Template Context="announcementEnt">
+                            <div class="row mb-3">
+                                <div class="col-md-10">
+                                    <h4>@announcementEnt.Title</h4>
+                                    <p>@announcementEnt.Description</p>
+                                    <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
+                                </div>
+                                @if (announcementEnt.Favorite)
+                                {
+                                    <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                        <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                        <RadzenButton Click="@(() => OnAddAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
+                                    </div>
+                                }
                             </div>
-                            @if (announcementEnt.Favorite)
-                            {
-                                <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
-                                    <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
-                                    <RadzenButton Click="@(() => OnAddAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
-                                </div>
-                            }
-                        </div>
-                    </Template>
-                </RadzenDataList>
+                        </Template>
+                    </RadzenDataList>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
