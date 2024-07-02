@@ -108,7 +108,7 @@ public partial class DocumentUser
                 await LoadDocumentsFav();
                 await LoadDocumentsFavMairie();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été ajouté à vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été ajouté à vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
@@ -116,7 +116,7 @@ public partial class DocumentUser
                 await LoadDocumentsFav();
                 await LoadDocumentsFavMairie();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été ajouté", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été ajouté", Duration = 4000 };
                 NotificationService.Notify(message);
 
 
@@ -154,7 +154,7 @@ public partial class DocumentUser
                 await LoadDocumentsFav();
                 await LoadDocumentsFavMairie();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé de vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été supprimé de vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
@@ -162,7 +162,7 @@ public partial class DocumentUser
                 await LoadDocumentsFav();
                 await LoadDocumentsFavMairie();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été supprimé", Duration = 4000 };
                 NotificationService.Notify(message);
 
 

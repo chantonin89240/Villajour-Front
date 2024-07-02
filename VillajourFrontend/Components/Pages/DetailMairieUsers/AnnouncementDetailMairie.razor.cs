@@ -21,10 +21,12 @@ public partial class AnnouncementDetailMairie
     [Inject] 
     private NotificationService? NotificationService { get; set; }
 
+    [Parameter]
+    public Guid idMairie { get; set; }
+
     protected List<AnnouncementByMairieDetailDto> announcementDetail = new List<AnnouncementByMairieDetailDto>();
 
     protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,7 +35,7 @@ public partial class AnnouncementDetailMairie
 
     protected async Task LoadAnnouncementDetail()
     {
-        var apiUrl = $"Announcement/GetAnnouncementByMairieDetail/{userGuid}/{MairieGuid}";
+        var apiUrl = $"Announcement/GetAnnouncementByMairieDetail/{userGuid}/{idMairie}";
         try
         {
             var announcementMairie = await HttpClient.GetFromJsonAsync<List<AnnouncementByMairieDetailDto>>(apiUrl);
@@ -71,14 +73,14 @@ public partial class AnnouncementDetailMairie
             {
                 await LoadAnnouncementDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été ajouté à vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été ajouté à vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadAnnouncementDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été ajouté", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été ajouté", Duration = 4000 };
                 NotificationService.Notify(message);
             }
         }
@@ -113,14 +115,14 @@ public partial class AnnouncementDetailMairie
             {
                 await LoadAnnouncementDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été retiré de vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été retiré de vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadAnnouncementDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été retiré", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été retiré", Duration = 4000 };
                 NotificationService.Notify(message);
             }
         }

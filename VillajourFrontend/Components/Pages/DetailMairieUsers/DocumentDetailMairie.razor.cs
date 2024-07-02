@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.Json;
 using VillajourFrontend.Dto;
 using VillajourFrontend.Dto.Document;
-using Microsoft.JSInterop;
 
 namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
 
@@ -26,9 +25,11 @@ public partial class DocumentDetailMairie
     [Inject]
     private IJSRuntime JS { get; set; }
 
+    [Parameter]
+    public Guid idMairie { get; set; }
+
     protected List<DocumentByMairieDetailDto> documentsDetail = new List<DocumentByMairieDetailDto>();
     protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,7 +38,7 @@ public partial class DocumentDetailMairie
 
     protected async Task LoadDocumentsDetail()
     {
-        var apiUrl = $"Document/GetDocumentByMairieDetail/{userGuid}/{MairieGuid}";
+        var apiUrl = $"Document/GetDocumentByMairieDetail/{userGuid}/{idMairie}";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentByMairieDetailDto>>(apiUrl);
@@ -90,14 +91,14 @@ public partial class DocumentDetailMairie
             {
                 await LoadDocumentsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été ajouté à vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été ajouté à vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadDocumentsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été ajouté", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été ajouté", Duration = 4000 };
                 NotificationService.Notify(message);
             }
         }
@@ -132,14 +133,14 @@ public partial class DocumentDetailMairie
             {
                 await LoadDocumentsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été retiré de vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Le document a été retiré de vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadDocumentsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été retiré", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, le document n'a pas été retiré", Duration = 4000 };
                 NotificationService.Notify(message);
             }
         }

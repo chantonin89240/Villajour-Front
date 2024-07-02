@@ -4,7 +4,7 @@
 <RadzenPanel>
     <HeaderTemplate>
         <div>
-            <h3>Profil de la Mairie</h3>
+            <h3>Vos profil</h3>
         </div>
         <div>
             <RadzenImage class="profil-picture" src=@model.Picture alt="Photo de Profil" />
@@ -14,8 +14,8 @@
         <RadzenTemplateForm Style="margin-top:5%;" TItem=Entity.Mairie Data=@model Submit="@(args => ModifyMairie(model))">
             <div style="width:80%">
                 <div class="ligne">
-                    <RadzenText class="details-title">Nom de la commune : </RadzenText>
-                    <RadzenTextBox Disabled="@NotModificationMode" class="details-data" Value="Auxonne"></RadzenTextBox>
+                    <RadzenText class="details-title">Nom de la mairie : </RadzenText>
+                    <RadzenTextBox Disabled="@NotModificationMode" class="details-data" @bind-value="@model.Name"></RadzenTextBox>
                 </div>
                 <div class="ligne">
                     <RadzenText class="details-title">Adresse de la mairie : </RadzenText>
@@ -28,6 +28,10 @@
                 <div class="ligne">
                     <RadzenText class="details-title">Siret : </RadzenText>
                     <RadzenTextBox Disabled="@NotModificationMode" class="details-data" @bind-value="@model.Siret"></RadzenTextBox>
+                </div>
+                <div class="ligne">
+                    <RadzenText class="details-title">E-mail : </RadzenText>
+                    <RadzenTextBox Disabled="@NotModificationMode" class="details-data" @bind-value="@model.Email"></RadzenTextBox>
                 </div>
             </div>
 

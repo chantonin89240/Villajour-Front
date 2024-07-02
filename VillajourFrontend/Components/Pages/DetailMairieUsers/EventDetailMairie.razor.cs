@@ -21,9 +21,11 @@ public partial class EventDetailMairie
     [Inject] 
     private NotificationService? NotificationService { get; set; }
 
+    [Parameter]
+    public Guid idMairie { get; set; }
+
     protected List<EventByMairieDetailDto> eventsDetail = new List<EventByMairieDetailDto>();
     protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,7 +34,7 @@ public partial class EventDetailMairie
 
     protected async Task LoadEventsDetail()
     {
-        var apiUrl = $"Event/GetEventByMairieDetail/{userGuid}/{MairieGuid}";
+        var apiUrl = $"Event/GetEventByMairieDetail/{userGuid}/{idMairie}";
         try
         {
             var eventMairie = await HttpClient.GetFromJsonAsync<List<EventByMairieDetailDto>>(apiUrl);
@@ -70,14 +72,14 @@ public partial class EventDetailMairie
             {
                 await LoadEventsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été ajouté à vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été ajouté à vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadEventsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'événement n'a pas été ajouté", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'événement n'a pas été ajouté", Duration = 4000 };
                 NotificationService.Notify(message);
             }
         }
@@ -112,14 +114,14 @@ public partial class EventDetailMairie
             {
                 await LoadEventsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été retiré de vos favoris", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'événement a été retiré de vos favoris", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadEventsDetail();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'événement n'a pas été retiré", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'événement n'a pas été retiré", Duration = 4000 };
                 NotificationService.Notify(message);
             }
         }

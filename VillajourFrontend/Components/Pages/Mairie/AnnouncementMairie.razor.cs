@@ -54,7 +54,7 @@ public partial class AnnouncementMairie
         if (result != null && result)
         {
             await LoadAnnouncement();
-            NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été ajouté", Duration = 10000 };
+            NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été ajouté", Duration = 4000 };
             NotificationService.Notify(message);
         }
     }
@@ -71,14 +71,14 @@ public partial class AnnouncementMairie
             {
                 await LoadAnnouncement();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été supprimé", Duration = 4000 };
                 NotificationService.Notify(message);
             }
             else
             {
                 await LoadAnnouncement();
 
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été supprimé", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Une erreur s'est produite, l'annonce n'a pas été supprimé", Duration = 4000 };
                 NotificationService.Notify(message);
 
 
@@ -106,7 +106,7 @@ public partial class AnnouncementMairie
             if (result != null && result)
             {
                 await LoadAnnouncement();
-                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été modifié", Duration = 10000 };
+                NotificationMessage message = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "L'annonce a été modifié", Duration = 4000 };
                 NotificationService.Notify(message);
             }
         }

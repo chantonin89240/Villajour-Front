@@ -1,6 +1,6 @@
 ﻿namespace VillajourFrontend.Dto;
 
-public class DeleteFavoriteMairieDto
+public class FavoriteMairieDto
 {
     public Guid UserId { get; set; }
     public Guid MairieId { get; set; }

@@ -1,5 +1,8 @@
-﻿@page "/AppointmentDetailMairie"
+﻿@page "/AppointmentDetailMairie/{idMairie:guid}"
 @attribute [Authorize(Roles = "user")]
+@using VillajourFrontend.Components.Layout
+
+<NavMenuDetailMairie IdMairie="@idMairie" />
 
 <h3>AppointmentDetailMairie</h3>
 
