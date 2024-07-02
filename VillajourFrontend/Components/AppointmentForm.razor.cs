@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 using VillajourFrontend.Entity;
 using System.Net.Http;
@@ -6,6 +7,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using VillajourFrontend.Dto.Appointement;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace VillajourFrontend.Components
 {
@@ -16,6 +18,9 @@ namespace VillajourFrontend.Components
 
         [Inject]
         protected HttpClient HttpClient { get; set; }
+
+        [Inject]
+        protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         [Parameter]
         public Appointment CurrentAppointment { get; set; }
@@ -29,12 +34,27 @@ namespace VillajourFrontend.Components
         protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
         protected Guid MairieId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
+        public bool IsMairie = false;
+        public bool IsUser = false;
+
         protected override async Task OnInitializedAsync()
         {
             await LoadAppointmentTypes();
             if (CurrentAppointment != null)
             {
                 model = CurrentAppointment;
+            }
+
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.IsInRole("mairie"))
+            {
+                IsMairie = true;
+            }
+            else if (user.IsInRole("user"))
+            {
+                IsUser = true;
             }
         }
 
@@ -61,7 +81,7 @@ namespace VillajourFrontend.Components
 
             model.UserId = UserId;
             model.MairieId = MairieId;
-            model.Statut = "en cours";
+            model.Statut = IsUser ? "non validé" : "en cours";
 
             var apiUrl = model.Id == 0 ? "Appointments" : $"Appointments/{model.Id}";
             Console.WriteLine($"API URL: {apiUrl}");
@@ -86,13 +106,14 @@ namespace VillajourFrontend.Components
             }
         }
 
-
         protected async Task RefuseAppointment()
         {
             if (model.Id == 0)
             {
                 DialogService.Close(null);
-            };
+            }
+
+            model.Statut = "Refusé";
             var apiUrl = $"Appointments/{model.Id}";
 
             try

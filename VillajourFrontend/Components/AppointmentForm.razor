@@ -51,15 +51,25 @@
     </div>
 </RadzenTemplateForm>
 
-<div class="footer">
-    <div class="btn-group">
-        <RadzenButton ButtonType="ButtonType.Submit" Text="Valider" Click="@(async () => await OnSubmit())" />
-        <RadzenButton Text="Refuser" Click="@(async () => await RefuseAppointment())" />
+@if (IsMairie)
+{
+    <div class="footer">
+        <div class="btn-group">
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Valider" Click="@(async () => await OnSubmit())" />
+            <RadzenButton Text="Refuser" Click="@(async () => await RefuseAppointment())" />
+        </div>
     </div>
-</div>
+}
+else if (IsUser)
+{
+    <div class="footer">
+        <div class="btn-group">
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Demander" Click="@(async () => await OnSubmit())" />
+        </div>
+    </div>
+}
 
 <style>
-
     .form-group {
         margin-bottom: 16px;
     }
@@ -81,7 +91,7 @@
     .dialog-title-center {
         text-align: center;
         font-size: 1.5em;
-        font-weight: bold; 
+        font-weight: bold;
         margin-bottom: 20px;
     }
 </style>
