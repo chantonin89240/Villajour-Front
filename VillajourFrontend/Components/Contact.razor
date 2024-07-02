@@ -1,0 +1,46 @@
+﻿@page "/Contact"
+@inject DialogService DialogService
+@using Radzen.Blazor
+@using VillajourFrontend.Entity
+
+<RadzenPanel>
+    <RadzenTemplateForm TItem="EmailModel" Data=@emailModel Submit=@Confirmer>
+        <RadzenFieldset Text="Envoyer un Email">
+
+            <RadzenLabel Text="Sujet" />
+            <RadzenTextBox Style="width:100%" @bind-Value="emailModel.Sujet" Name="Sujet" />
+            <RadzenRequiredValidator Text="Sujet requis" Component="Sujet" />
+
+            <RadzenLabel Text="Message" />
+            <RadzenTextArea Style="width:100%" @bind-Value="emailModel.Message" Name="Message" />
+            <RadzenRequiredValidator Text="Message requis" Component="Message" />
+
+            <div class="ligne">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Envoyer" class="button-confirmer"/>
+                <RadzenButton Text="Annuler" Click="@(args => Annuler())" class="button-annuler rz-background-color-base-600"></RadzenButton>
+            </div>
+        </RadzenFieldset>
+    </RadzenTemplateForm>
+</RadzenPanel>
+
+<style>
+    .ligne {
+        display: flex;
+        align-items: center;
+    }
+
+    .button-annuler {
+        width: 40%;
+        height: 15%;
+        margin-top: 2%;
+        margin-right: 2%;
+        margin-left: auto;
+    }
+
+    .button-confirmer {
+        width: 40%;
+        height: 15%;
+        margin-top: 2%;
+        margin-right: auto;
+    }
+</style>

@@ -21,7 +21,7 @@ namespace VillajourFrontend.Components.Pages.Users
         [Inject]
         protected NotificationService NotificationService { get; set; }
 
-        protected VillajourFrontend.Entity.User model = new VillajourFrontend.Entity.User();
+        protected Entity.User model = new();
 
 
         protected RadzenScheduler<Entity.User> scheduler;
@@ -54,9 +54,19 @@ namespace VillajourFrontend.Components.Pages.Users
             }
         }
 
-        protected async Task LoadPopup()
+        protected async Task PopupDeleteAccount()
         {
             var result = await DialogService.OpenAsync<DeleteAccount>("Suppression du compte");
+
+            if (result != null)
+            {
+                await scheduler.Reload();
+            }
+        }
+
+        protected async Task PopupContact()
+        {
+            var result = await DialogService.OpenAsync<Contact>("Nous contacter");
 
             if (result != null)
             {

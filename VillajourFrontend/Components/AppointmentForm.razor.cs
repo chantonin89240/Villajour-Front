@@ -47,7 +47,7 @@ namespace VillajourFrontend.Components
             }
         }
 
-        protected async Task ValidateAppointment()
+        protected void ValidateAppointment()
         {
             model.Validation = true;
             DialogService.Close(model);
@@ -64,7 +64,7 @@ namespace VillajourFrontend.Components
             DialogService.Close(null);
         }
 
-        protected async Task CancelAppointment()
+        protected void CancelAppointment()
         {
             model.Validation = false;
             DialogService.Close(model);

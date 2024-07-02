@@ -54,10 +54,20 @@ namespace VillajourFrontend.Components.Pages.Mairie
                 Console.WriteLine($"Erreur lors du chargement de la mairie: {ex.Message}");
             }
         }
-        
-        protected async Task LoadPopup()
+
+        protected async Task PopupDeleteAccount()
         {
             var result = await DialogService.OpenAsync<DeleteAccount>("Suppression du compte");
+
+            if (result != null)
+            {
+                await scheduler.Reload();
+            }
+        }
+
+        protected async Task PopupContact()
+        {
+            var result = await DialogService.OpenAsync<Contact>("Nous contacter");
 
             if (result != null)
             {

@@ -40,7 +40,8 @@
                     <RadzenButton ButtonType="ButtonType.Submit" class="buttons rz-background-color-success">Valider les modifications</RadzenButton>
                     <RadzenButton Click="@(args => ExitModificationMode())" class="buttons rz-background-color-base-600">Annuler</RadzenButton>
                 }
-                <RadzenButton Click="@(args => LoadPopup())" class="button-supprimer rz-background-color-danger">Supprimer mon compte</RadzenButton>
+                <RadzenButton Click="@(args => PopupDeleteAccount())" class="button-supprimer rz-background-color-danger">Supprimer mon compte</RadzenButton>
+                <RadzenButton Click="@(args => PopupContact())" class="button-supprimer">Nous contacter</RadzenButton>
             </div>
         </RadzenTemplateForm>
     </ChildContent>
