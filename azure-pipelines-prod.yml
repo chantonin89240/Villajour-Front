@@ -74,12 +74,12 @@ jobs:
     inputs:
       azureSubscription: 'Frontend (Diiage2024.VillAjour.1)(b0868e01-cd40-4fd5-ad81-2bfbe69f968a)'
       appName: 'appvillajour'
-      resourceGroupName: 'fakeprod'
+      resourceGroupName: 'villajourFrontend'
       appSettings: |
         [
           {
           "name": "OpenIDConnectSettings__Authority",
-          "value": "https://keycloak.villajour.fr:8443/realms/Villajour/",
+          "value": "https://auth.villajour.fr:8443/realms/Villajour/",
           "slotSetting": false
           },
           {
