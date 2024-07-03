@@ -3,7 +3,6 @@ using Microsoft.JSInterop;
 using Radzen;
 using VillajourFrontend.Dto.Document;
 using VillajourFrontend.Entity;
-using Microsoft.JSInterop;
 
 namespace VillajourFrontend.Components.Pages.Mairie;
 

@@ -20,9 +20,9 @@ public partial class HomeUser
     [Inject] 
     private NotificationService? NotificationService { get; set; }
 
-    List<VillajourFrontend.Entity.Mairie> mairies = new List<VillajourFrontend.Entity.Mairie>();
-    List<VillajourFrontend.Entity.Mairie> filteredMairies = new List<VillajourFrontend.Entity.Mairie>();
-    List<VillajourFrontend.Entity.Mairie> mairiesFav = new List<VillajourFrontend.Entity.Mairie>();
+    List<Entity.Mairie> mairies = new List<Entity.Mairie>();
+    List<Entity.Mairie> filteredMairies = new List<Entity.Mairie>();
+    List<Entity.Mairie> mairiesFav = new List<Entity.Mairie>();
     string searchQuery = "";
 
     protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
@@ -38,8 +38,8 @@ public partial class HomeUser
         var apiUrl = $"Mairie";
         try
         {
-            var mairie = await HttpClient.GetFromJsonAsync<List<VillajourFrontend.Entity.Mairie>>(apiUrl);
-            mairies = mairie?.ToList() ?? new List<VillajourFrontend.Entity.Mairie>();
+            var mairie = await HttpClient.GetFromJsonAsync<List<Entity.Mairie>>(apiUrl);
+            mairies = mairie?.ToList() ?? new List<Entity.Mairie>();
             filteredMairies = mairies;
             this.StateHasChanged();
         }
@@ -54,8 +54,8 @@ public partial class HomeUser
         var apiUrl = $"User/GetMairieFavByUser/{userGuid}";
         try
         {
-            var mairie = await HttpClient.GetFromJsonAsync<List<VillajourFrontend.Entity.Mairie>>(apiUrl);
-            mairiesFav = mairie?.ToList() ?? new List<VillajourFrontend.Entity.Mairie>();
+            var mairie = await HttpClient.GetFromJsonAsync<List<Entity.Mairie>>(apiUrl);
+            mairiesFav = mairie?.ToList() ?? new List<Entity.Mairie>();
             this.StateHasChanged();
         }
         catch (Exception ex)
@@ -121,5 +121,4 @@ public partial class HomeUser
     {
         NavigationManager.NavigateTo($"/HomeDetailMairie/{idMairie}");
     }
-
 }

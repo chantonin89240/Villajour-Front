@@ -1,6 +1,91 @@
 ﻿@page "/HomeMairie"
 @attribute [Authorize(Roles = "mairie")]
 
-<h3>HomeMairie</h3>
+<h1>Bienvenu sur votre page d'accueil</h1>
 
+<hr />
 
+@if (homeMairie.Announcement == null)
+{
+    <p>Vos n'avez aucune annonce de publier.</p>
+}
+else
+{
+    <h2>Votre dernière annonce</h2>
+    <RadzenCard Variant="Variant.Filled" Class="rz-my-12 rz-mx-auto">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+            <RadzenStack Gap="0">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Titre</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Announcement.Title)</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Date</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Announcement.Date)</b></RadzenText>
+            </RadzenStack>
+            <RadzenStack Gap="1">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Type</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Announcement.AnnouncementType.Libelle)</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Description</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Announcement.Description)</b></RadzenText>
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+}
+
+<hr />
+
+@if (homeMairie.Event == null)
+{
+    <p>Vos n'avez aucun événement de publier.</p>
+}
+else
+{
+    <h2>Votre dernier événement</h2>
+    <RadzenCard Variant="Variant.Filled" Class="rz-my-12 rz-mx-auto cardHome">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+            <RadzenStack Gap="0">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Titre</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Event.Title)</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Adresse</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Event.Address)</b></RadzenText>
+            </RadzenStack>
+            <RadzenStack Gap="1">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Horaire d'ouverture</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Event.StartTime)</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Horaire de fermeture</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Event.EndTime)</b></RadzenText>
+            </RadzenStack>
+            <RadzenStack Gap="2">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Type</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Event.EventType.Libelle)</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Description</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Event.Description)</b></RadzenText>
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+}
+
+<hr />
+
+@if (homeMairie.Document == null)
+{
+    <p>Vos n'avez aucun document de publier.</p>
+}
+else
+{
+    <h2>Votre dernier document</h2>
+    <RadzenCard Variant="Variant.Filled" Class="rz-my-12 rz-mx-auto cardHome">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+            <RadzenStack Gap="0">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Titre</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Document.Title)</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Date</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Document.Date)</b></RadzenText>
+            </RadzenStack>
+            <RadzenStack Gap="1">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Type</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Document.DocumentType.Libelle)</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Description</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(homeMairie.Document.Description)</b></RadzenText>
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+}
