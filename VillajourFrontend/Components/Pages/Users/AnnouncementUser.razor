@@ -31,7 +31,7 @@ else
                                 <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
                             </div>
                             <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
-                                <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                                <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" />
                             </div>
                             <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
                                 <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
@@ -70,7 +70,7 @@ else
                                 <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
                             </div>
                             <div class="col-md-2 text-end" style="display: flex; justify-content: center; align-items: center;">
-                                <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                                <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" />
                             </div>
                             @if (announcementEnt.Favorite)
                             {

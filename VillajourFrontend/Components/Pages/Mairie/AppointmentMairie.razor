@@ -7,7 +7,7 @@
 
 <div class="appointments-container">
     <h3>Réservation des places</h3>
-    <RadzenScheduler style="height: 575px;" @ref="scheduler" TItem="Appointment" Data="appointments"
+    <RadzenScheduler style="height: 575px;" @ref="scheduler" TItem="Appointment" Data="appointments" lang="fr"
                      StartProperty="StartTime" EndProperty="EndTime" TextProperty="Title"
                      AppointmentSelect="OnAppointmentSelect"
                      SlotSelect="OnSlotSelect">
@@ -15,43 +15,6 @@
         <RadzenWeekView />
         <RadzenMonthView />
     </RadzenScheduler>
-    <RadzenButton Text="Ajuster les plages d'horaires" Class="adjust-btn" />
 </div>
 
 <RadzenNotification />
-
-<style>
-    .appointments-container {
-        width : 100%;
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-height : 800px;
-        height : 100%;
-    }
-
-        .appointments-container h3 {
-            margin-bottom: 20px;
-        }
-
-    .adjust-btn {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 4px;
-        margin-top: 20px;
-        display: block;
-    }
-
-    .dialog-title-center {
-        text-align: center;
-        font-size: 1.5em;
-        font-weight: bold;
-    }
-
-</style>

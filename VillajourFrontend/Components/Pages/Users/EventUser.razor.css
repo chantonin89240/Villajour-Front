@@ -16,3 +16,12 @@
     line-height: 20px;
     padding: 8px;
 }
+
+.gradient-button ::deep {
+    background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;
+    border: none !important;
+    color: white !important;
+}
+.text {
+    color: #FF9505;
+}

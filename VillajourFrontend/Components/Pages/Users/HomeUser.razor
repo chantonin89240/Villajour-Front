@@ -12,7 +12,7 @@
             <RadzenTextBox @bind-Value="searchQuery" Placeholder="Entrer l'adresse d'une mairie" Style="width: 100%;" Change="@((args) => FilterMairies())" />
         </div>
         <div class="col-md-2">
-            <RadzenButton Text="Rechercher" Click="@FilterMairies" ButtonStyle="ButtonStyle.Primary" Icon="search" />
+            <RadzenButton Text="Rechercher" Click="@FilterMairies" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" class="gradient-button" Icon="search" />
         </div>
     </div>
 
@@ -25,7 +25,7 @@
                 <RadzenDataGridColumn TItem="Mairie" Property="Siret" Title="Siret" />
                 <RadzenDataGridColumn TItem="Mairie" Property="Id" Title="Accéder à la mairie">
                     <Template Context="data">
-                        <RadzenButton Click="@(() => OnRedirectDetailMairie(data.Id))" Icon="label_outline" title="Accéder à la mairie" ButtonStyle="ButtonStyle.Primary" />
+                        <RadzenButton Click="@(() => OnRedirectDetailMairie(data.Id))" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" Icon="label_outline" title="Accéder à la mairie" class="gradient-button" />
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>
@@ -33,7 +33,7 @@
     </div>
 </div>
 
-<div style="margin-top: 5em;">
+<div class="favorite-mairies-section">
     <h3>Vos mairies favoris</h3>
 
     @if (mairiesFav == null)
@@ -46,13 +46,13 @@
     }
     else
     {
-        <div class="mt-4 mb-4">
-            <RadzenDataList Style="height:300px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@mairiesFav" TItem="Mairie" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+        <div class="favorite-mairies-list">
+            <RadzenDataList class="data-list" WrapItems="true" AllowPaging="true" Data="@mairiesFav" TItem="Mairie" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
                 <Template Context="mairie">
-                    <RadzenCard Style="width: 100%; padding: 0;">
+                    <RadzenCard class="mairie-card">
                         <RadzenRow Gap="0">
                             <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(mairie.Name)</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(mairie.Name)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeLG="8" Class="rz-p-4">
                                 <RadzenRow Gap="0">
@@ -74,21 +74,16 @@
                                     </RadzenColumn>
                                 </RadzenRow>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                                <RadzenButton Click="@(() => OnRedirectDetailMairie(mairie.Id))" Icon="label_outline" title="Accéder à la mairie" ButtonStyle="ButtonStyle.Primary" />
+                            <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4 button-container">
+                                <RadzenButton Click="@(() => OnRedirectDetailMairie(mairie.Id))" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;"  Icon="label_outline" title="Accéder à la mairie" class="gradient-button" />
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4 button-container">
                                 <RadzenButton Click="@(() => OnDeleteMairieFav(mairie.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenCard>
                 </Template>
-            </RadzenDataList> 
+            </RadzenDataList>
         </div>
     }
 </div>
-
-
-
-
-

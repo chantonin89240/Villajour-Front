@@ -1,0 +1,30 @@
+﻿.favorite-mairies-section {
+    margin-top: 5em;
+}
+
+.favorite-mairies-list {
+    margin-top: 4em;
+    margin-bottom: 4em;
+}
+
+.data-list {
+    height: 300px;
+    overflow: auto;
+}
+
+.mairie-card {
+    width: 100%;
+    padding: 0;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gradient-button ::deep {
+    background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;
+    border: none !important;
+    color: white !important;
+}

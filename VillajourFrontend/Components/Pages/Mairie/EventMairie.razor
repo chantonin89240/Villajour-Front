@@ -8,7 +8,7 @@
 
 <div class="eventTitle">
     <h1>Vos événements</h1>
-    <RadzenButton Text="Ajouter un événement" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Click="@OnAddNewEvent" />
+    <RadzenButton Text="Ajouter un événement" Icon="add_circle_outline" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" Click="@OnAddNewEvent" />
 </div>
 
 @if (events == null)
@@ -26,7 +26,7 @@ else
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(eventEnt.Title)</RadzenText>
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(eventEnt.Title)</RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="5" Class="rz-p-4">
                         <RadzenRow Gap="0">
@@ -45,7 +45,7 @@ else
                         </RadzenRow>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                        <RadzenButton Click="@(() => OnDetailEvent(eventEnt.Id))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                        <RadzenButton Click="@(() => OnDetailEvent(eventEnt.Id))" Icon="info" style="background-color:  #E2711D !important;" />
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                         <RadzenButton Text="Modifier" Click="@(() => OnUpdateEvent(eventEnt.Id))" Style="width: 100%" class="rz-background-color-warning-light" />

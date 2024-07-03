@@ -25,7 +25,7 @@ else
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(eventEnt.Title)</RadzenText>
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(eventEnt.Title)</RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="8" Class="rz-p-4">
                         <RadzenRow Gap="0">
@@ -44,7 +44,7 @@ else
                         </RadzenRow>
                     </RadzenColumn>
                     <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                        <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id, true))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                        <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id, true))" Icon="info" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" />
                     </RadzenColumn>
                     <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                         <RadzenButton Click="@(() => OnDeleteEventFav(eventEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
@@ -74,7 +74,7 @@ else
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(eventEnt.Title)</RadzenText>
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(eventEnt.Title)</RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="8" Class="rz-p-4">
                         <RadzenRow Gap="0">
@@ -93,7 +93,7 @@ else
                         </RadzenRow>
                     </RadzenColumn>
                     <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                        <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id, true))" Icon="info" ButtonStyle="ButtonStyle.Primary" />
+                        <RadzenButton Click="@(() => OnDetailEventFav(eventEnt.Id, true))" Icon="info" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" />
                     </RadzenColumn>
                     @if (eventEnt.Favorite)
                     {

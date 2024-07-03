@@ -8,7 +8,7 @@
 
 <div class="documentTitle">
     <h1>Vos documents</h1>
-    <RadzenButton Text="Ajouter un document" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Click="@OnAddNewDocument" />
+    <RadzenButton Text="Ajouter un document" Icon="add_circle_outline" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" Click="@OnAddNewDocument" />
 </div>
 
 @if (documents == null)
@@ -26,7 +26,7 @@ else
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(Document.Title)</RadzenText>
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(Document.Title)</RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
                         <RadzenRow Gap="0">
