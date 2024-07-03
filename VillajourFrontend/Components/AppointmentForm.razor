@@ -55,8 +55,8 @@
 {
     <div class="footer">
         <div class="btn-group">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Valider" Click="@(async () => await OnSubmit())" />
-            <RadzenButton Text="Refuser" Click="@(async () => await RefuseAppointment())" />
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Valider" Click="@(async () => await OnSubmit())" class="rz-background-color-success-light" />
+            <RadzenButton Text="Refuser" class="rz-background-color-danger-light" Click="@(async () => await RefuseAppointment())" />
         </div>
     </div>
 }
@@ -64,7 +64,7 @@ else if (IsUser)
 {
     <div class="footer">
         <div class="btn-group">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Demander" Click="@(async () => await OnSubmit())" />
+            <RadzenButton ButtonType="ButtonType.Submit" class="rz-background-color-success-light" Text="Demander" Click="@(async () => await OnSubmit())" />
         </div>
     </div>
 }

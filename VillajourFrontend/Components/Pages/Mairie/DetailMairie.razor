@@ -46,7 +46,8 @@
                     <RadzenButton Click="@(args => ExitModificationMode())" class="buttons rz-background-color-base-600">Annuler</RadzenButton>
                 }
                 <RadzenButton Click="@(args => PopupDeleteAccount())" class="button-supprimer rz-background-color-danger">Supprimer mon compte</RadzenButton>
-                <RadzenButton Click="@(args => PopupContact())" class="button-supprimer">Nous contacter</RadzenButton>
+                
+                <RadzenButton Click="@(args => PopupContact())"style ="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" class="button-supprimer">Nous contacter</RadzenButton>
             </div>
         </RadzenTemplateForm>
     </ChildContent>
@@ -54,15 +55,15 @@
 
 <style>
     .buttons {
-        width: 15%;
-        height: 15%;
+        width: 150px;
+        height: 15px;
         margin-top: 2%;
         margin-right: 2%;
     }
 
     .button-supprimer {
-        width: 15%;
-        height: 15%;
+        width: 150px;
+        height: 55px;
         margin-top: 2%;
         margin-right: 0%;
         margin-left:auto;

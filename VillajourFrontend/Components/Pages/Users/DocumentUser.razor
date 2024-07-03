@@ -25,7 +25,7 @@ else
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(Document.Title)</RadzenText>
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(Document.Title)</RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
                         <RadzenRow Gap="0">
@@ -44,7 +44,7 @@ else
                         </RadzenRow>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                        <RadzenButton Text="Télécharger" title="Télécharger le document" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%" class="rz-background-color-success-light" />
+                        <RadzenButton Text="Télécharger" title="Télécharger le document" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%; background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" class="rz-background-color-success-light" />
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                         <RadzenButton Click="@(() => OnDeleteDocumentFav(Document.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
@@ -74,7 +74,7 @@ else
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 product-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(Document.Title)</RadzenText>
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(Document.Title)</RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="6" Class="rz-p-4">
                         <RadzenRow Gap="0">
@@ -93,7 +93,7 @@ else
                         </RadzenRow>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
-                        <RadzenButton Text="Télécharger" title="Télécharger le document" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%" class="rz-background-color-success-light" />
+                        <RadzenButton Text="Télécharger" title="Télécharger le document" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%; background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" class="rz-background-color-success-light" />
                     </RadzenColumn>
                     @if (Document.Favorite)
                     {

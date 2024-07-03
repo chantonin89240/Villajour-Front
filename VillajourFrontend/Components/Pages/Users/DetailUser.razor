@@ -30,11 +30,11 @@
                 }
                 @if (NotModificationMode == false)
                 {
-                    <RadzenButton ButtonType="ButtonType.Submit" class="buttons rz-background-color-success">Valider les modifications</RadzenButton>
+                    <RadzenButton class="buttons rz-background-color-success">Valider les modifications</RadzenButton>
                     <RadzenButton Click="@(args => ExitModificationMode())" class="buttons rz-background-color-base-600">Annuler</RadzenButton>
                 }
                 <RadzenButton Click="@(args => PopupDeleteAccount())" class="button-supprimer rz-background-color-danger">Supprimer mon compte</RadzenButton>
-                <RadzenButton Click="@(args => PopupContact())" class="button-supprimer">Nous contacter</RadzenButton>
+                <RadzenButton Click="@(args => PopupContact())" class="button-supprimer" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;">Nous contacter</RadzenButton>
 
             </div>
         </RadzenTemplateForm>
