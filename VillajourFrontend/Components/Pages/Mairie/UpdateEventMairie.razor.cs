@@ -33,7 +33,7 @@ public partial class UpdateEventMairie : ComponentBase
 
     protected async Task LoadEventType()
     {
-        var apiUrl = "https://localhost:7205/Api/Event/GetEventType";
+        var apiUrl = "Event/GetEventType";
         try
         {
             var type = await HttpClient.GetFromJsonAsync<List<EventType>>(apiUrl);
@@ -47,7 +47,7 @@ public partial class UpdateEventMairie : ComponentBase
 
     protected async Task HandleValidSubmit()
     {
-        var apiUrl = "https://localhost:7205/Api/Event/" + Event.Id;
+        var apiUrl = "Event/" + Event.Id;
         try
         {
             Event updateEvent = new Event()

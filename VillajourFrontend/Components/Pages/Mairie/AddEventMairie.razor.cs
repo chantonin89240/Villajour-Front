@@ -31,7 +31,7 @@ public partial class AddEventMairie : ComponentBase
 
     protected async Task LoadEventType()
     {
-        var apiUrl = "https://localhost:7205/Api/Event/GetEventType";
+        var apiUrl = "Event/GetEventType";
         try
         {
             var type = await HttpClient.GetFromJsonAsync<List<EventType>>(apiUrl);

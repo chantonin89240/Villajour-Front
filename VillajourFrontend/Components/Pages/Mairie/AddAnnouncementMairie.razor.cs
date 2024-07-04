@@ -31,7 +31,7 @@ public partial class AddAnnouncementMairie : ComponentBase
 
     protected async Task LoadAnnouncementType()
     {
-        var apiUrl = "https://localhost:7205/Api/Announcement/GetAnnouncementType";
+        var apiUrl = "Announcement/GetAnnouncementType";
         try
         {
             var type = await HttpClient.GetFromJsonAsync<List<AnnouncementType>>(apiUrl);
