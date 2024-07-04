@@ -19,29 +19,35 @@ else if (!annonceFav.Any())
 }
 else
 {
-    <div class="container mt-4 mb-4">
-        <div class="row">
-            <div class="col-md-12">
-                    <RadzenDataList Data="@annonceFav" TItem="AnnouncementDto" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
-                    <Template Context="announcementEnt">
-                        <div class="row mb-3">
-                            <div class="col-md-8">
-                                <h4>@announcementEnt.Title</h4>
-                                <p>@announcementEnt.Description</p>
-                                <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
-                            </div>
-                            <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
-                                <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" />
-                            </div>
-                            <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
-                                <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
-                            </div>
-                        </div>
-                    </Template>
-                </RadzenDataList>
-            </div>
-        </div>
-    </div>
+    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@annonceFav" TItem="AnnouncementDto" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+        <Template Context="announcementEnt">
+            <RadzenCard Style="width: 100%; padding: 0;">
+                <RadzenRow Gap="0">
+                    <RadzenColumn Size="12" SizeLG="3" Class="rz-p-4 product-title">
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(announcementEnt.Title)</RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeLG="7" Class="rz-p-4">
+                        <RadzenRow Gap="0">
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(@announcementEnt.Date.ToShortDateString())</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Description</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(announcementEnt.Description)</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
+        </Template>
+    </RadzenDataList>
 }
                                 
 <div class="AnnouncementTitle">
@@ -58,36 +64,42 @@ else if (!annonceByMairieFav.Any())
 }
 else
 {
-    <div class="container mt-4 mb-4">
-        <div class="row">
-            <div class="col-md-12">
-                <RadzenDataList Data="@annonceByMairieFav" TItem="AnnouncementByMairieFavoriteDto" AllowPaging="true" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
-                    <Template Context="announcementEnt">
-                        <div class="row mb-3">
-                            <div class="col-md-8">
-                                <h4>@announcementEnt.Title</h4>
-                                <p>@announcementEnt.Description</p>
-                                <p><em>@announcementEnt.Date.ToShortDateString()</em></p>
-                            </div>
-                            <div class="col-md-2 text-end" style="display: flex; justify-content: center; align-items: center;">
-                                <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" />
-                            </div>
-                            @if (announcementEnt.Favorite)
-                            {
-                                <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
-                                    <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
-                                    <RadzenButton Click="@(() => OnAddAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
-                                </div>
-                            }
-                        </div>
-                    </Template>
-                </RadzenDataList>
-            </div>
-        </div>
-    </div>
+    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@annonceByMairieFav" TItem="AnnouncementByMairieFavoriteDto" PageSize="3" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+        <Template Context="announcementEnt">
+            <RadzenCard Style="width: 100%; padding: 0;">
+                <RadzenRow Gap="0">
+                    <RadzenColumn Size="12" SizeLG="3" Class="rz-p-4 product-title">
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" style="color: #FF9505">@(announcementEnt.Title)</RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeLG="7" Class="rz-p-4">
+                        <RadzenRow Gap="0">
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(@announcementEnt.Date.ToShortDateString())</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Description</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(announcementEnt.Description)</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenButton Click="@(() => OnDetailAnnouncementFav(announcementEnt.Id, true))" Icon="info" style="background: linear-gradient(to bottom right, #FFC971, #FFB627) !important;" />
+                    </RadzenColumn>
+                    @if (announcementEnt.Favorite)
+                    {
+                        <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenButton Click="@(() => OnDeleteAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
+                        </RadzenColumn>
+                    }
+                    else
+                    {
+                        <RadzenColumn Size="6" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenButton Click="@(() => OnAddAnnouncementFav(announcementEnt.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
+                        </RadzenColumn>
+                    }
+                </RadzenRow>
+            </RadzenCard>
+        </Template>
+    </RadzenDataList>
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
+using System.Security.Claims;
 using VillajourFrontend.Dto.Announcement;
 using VillajourFrontend.Entity;
 
@@ -16,11 +17,12 @@ public partial class AddAnnouncementMairie : ComponentBase
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid MairieGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
+
     protected List<AnnouncementType> announcementTypeList = new List<AnnouncementType>();
-
     protected AddAnnouncementDto newAnnouncement = new AddAnnouncementDto();
-
-    protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {

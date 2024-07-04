@@ -1,28 +1,25 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Radzen;
+using System.Globalization;
+using System.Security.Claims;
 using VillajourFrontend.Entity;
-using Radzen.Blazor;
-using System.Net.Http.Json;
-
-
-using Microsoft.AspNetCore.Components;
 
 namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
 
 public partial class AppointmentDetailMairie
 {
+    [Parameter]
+    public Guid idMairie { get; set; }
+
     [Inject]
     protected DialogService DialogService { get; set; }
 
     [Inject]
     protected HttpClient HttpClient { get; set; }
-
-    [Parameter]
-    public Guid idMairie { get; set; }
-
-    protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid MairieId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid UserGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     private DateTime selectedDate = DateTime.Today;
     private List<string> availableSlots = new List<string>();
@@ -51,7 +48,7 @@ public partial class AppointmentDetailMairie
 
     private async Task LoadAppointments()
     {
-        var apiUrl = $"Appointments/GetAppointmentByMairie/{MairieId}";
+        var apiUrl = $"Appointments/GetAppointmentByMairie/{idMairie}";
         try
         {
             existingAppointments = await HttpClient.GetFromJsonAsync<List<Appointment>>(apiUrl) ?? new List<Appointment>();
@@ -110,8 +107,8 @@ public partial class AppointmentDetailMairie
         {
             StartTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, start.Hour, start.Minute, 0),
             EndTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, start.Hour, start.Minute, 0).AddMinutes(30),
-            UserId = UserId,
-            MairieId = MairieId
+            UserId = UserGuid,
+            MairieId = idMairie
         };
 
         var parameters = new Dictionary<string, object> { { "CurrentAppointment", appointment } };

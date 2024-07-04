@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using VillajourFrontend.Dto;
@@ -10,6 +11,9 @@ namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
 
 public partial class DocumentDetailMairie
 {
+    [Parameter]
+    public Guid idMairie { get; set; }
+
     [Inject]
     protected HttpClient? HttpClient { get; set; }
 
@@ -25,11 +29,11 @@ public partial class DocumentDetailMairie
     [Inject]
     private IJSRuntime JS { get; set; }
 
-    [Parameter]
-    public Guid idMairie { get; set; }
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid UserGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     protected List<DocumentByMairieDetailDto> documentsDetail = new List<DocumentByMairieDetailDto>();
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,7 +42,7 @@ public partial class DocumentDetailMairie
 
     protected async Task LoadDocumentsDetail()
     {
-        var apiUrl = $"Document/GetDocumentByMairieDetail/{userGuid}/{idMairie}";
+        var apiUrl = $"Document/GetDocumentByMairieDetail/{UserGuid}/{idMairie}";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentByMairieDetailDto>>(apiUrl);
@@ -72,7 +76,7 @@ public partial class DocumentDetailMairie
         var apiUrl = "User/AddFavoriteContent/";
         FavoriteContentDto addFav = new FavoriteContentDto()
         {
-            UserId = userGuid,
+            UserId = UserGuid,
             AnnouncementId = null,
             EventId = null,
             DocumentId = idDocument
@@ -114,7 +118,7 @@ public partial class DocumentDetailMairie
         var apiUrl = "User/DeleteFavoriteContent/";
         FavoriteContentDto deleteFav = new FavoriteContentDto()
         {
-            UserId = userGuid,
+            UserId = UserGuid,
             AnnouncementId = null,
             EventId = null,
             DocumentId = idDocument

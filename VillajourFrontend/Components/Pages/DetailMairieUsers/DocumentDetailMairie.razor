@@ -20,7 +20,7 @@
     }
     else
     {
-        <RadzenDataList Style="height:600px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@documentsDetail" TItem="DocumentByMairieDetailDto" PageSize="4" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+        <RadzenDataList WrapItems="true" AllowPaging="true" Data="@documentsDetail" TItem="DocumentByMairieDetailDto" PageSize="4" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
             <Template Context="Document">
                 <RadzenCard Style="width: 100%; padding: 0;">
                     <RadzenRow Gap="0">
@@ -43,18 +43,18 @@
                                 </RadzenColumn>
                             </RadzenRow>
                         </RadzenColumn>
-                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                        <RadzenColumn Size="12" SizeLG="3" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                             <RadzenButton Text="Télécharger" title="Télécharger le document" Click="@(() => OnDownloadDocument(Document.DocumentUrl))" Style="width: 100%" class="rz-background-color-success-light" />
                         </RadzenColumn>
                         @if (Document.Favorite)
                         {
-                            <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                                 <RadzenButton Click="@(() => OnDeleteDocumentFav(Document.Id))" Icon="favorite" title="Retirer des favoris" ButtonStyle="ButtonStyle.Danger" />
                             </RadzenColumn>
                         }
                         else
                         {
-                            <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
+                            <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4" style="display: flex; justify-content: center; align-items: center;">
                                 <RadzenButton Click="@(() => OnAddDocumentFav(Document.Id))" Icon="favorite" title="Ajouter aux favoris" ButtonStyle="ButtonStyle.Success" />
                             </RadzenColumn>
                         }

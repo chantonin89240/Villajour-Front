@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using System.Reflection;
-using System.Text.Json;
+using System.Security.Claims;
 using System.Text;
-using VillajourFrontend.Components.Pages.DetailMairieUsers;
+using System.Text.Json;
 using VillajourFrontend.Dto;
 using VillajourFrontend.Dto.Announcement;
-using VillajourFrontend.Dto.Event;
-using VillajourFrontend.Entity;
 
 namespace VillajourFrontend.Components.Pages.Users;
 
@@ -22,13 +19,15 @@ public partial class AnnouncementUser
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
-    [Inject] private NotificationService? NotificationService { get; set; }
+    [Inject] 
+    private NotificationService? NotificationService { get; set; }
+
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid userGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     protected List<AnnouncementDto> annonceFav = new List<AnnouncementDto>();
     protected List<AnnouncementByMairieFavoriteDto> annonceByMairieFav = new List<AnnouncementByMairieFavoriteDto>();
-
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid mairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using VillajourFrontend.Dto.Document;
 using VillajourFrontend.Entity;
 
@@ -18,13 +19,13 @@ public partial class AddDocumentMairie : ComponentBase
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
-    protected List<DocumentType> documentTypeList = new List<DocumentType>();
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid MairieGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
+    protected List<DocumentType> documentTypeList = new List<DocumentType>();
     protected AddDocumentDto newDocument = new AddDocumentDto();
     private IBrowserFile? selectedFile;
-
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {

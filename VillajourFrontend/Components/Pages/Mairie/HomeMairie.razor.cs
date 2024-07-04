@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using System.Text.Json;
-using System.Text;
+using System.Security.Claims;
 using VillajourFrontend.Dto;
 
 namespace VillajourFrontend.Components.Pages.Mairie;
@@ -20,9 +19,11 @@ public partial class HomeMairie
     [Inject]
     private NotificationService? NotificationService { get; set; }
 
-    HomeMairieDto homeMairie = new HomeMairieDto();
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid MairieGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
-    protected Guid mairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    HomeMairieDto homeMairie = new HomeMairieDto();
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,7 +32,7 @@ public partial class HomeMairie
 
     protected async Task LoadHomeMairie()
     {
-        var apiUrl = $"Mairie/GetHomeMairie/{mairieGuid}";
+        var apiUrl = $"Mairie/GetHomeMairie/{MairieGuid}";
         try
         {
             homeMairie = await HttpClient.GetFromJsonAsync<HomeMairieDto>(apiUrl);

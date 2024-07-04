@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
+using System.Security.Claims;
 using VillajourFrontend.Entity;
 
 namespace VillajourFrontend.Components.Pages.Users;
@@ -19,11 +20,13 @@ public partial class DetailUser : ComponentBase
     [Inject]
     protected NotificationService? NotificationService { get; set; }
 
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid userGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
+
     protected User model = new User();
 
     protected RadzenScheduler<User>? scheduler;
-
-    protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
     protected bool IsUser => true;
 
     protected bool NotModificationMode;
@@ -36,7 +39,7 @@ public partial class DetailUser : ComponentBase
 
     protected async Task LoadUser()
     {
-        var apiUrl = "User/" + UserId;
+        var apiUrl = "User/" + userGuid;
         try
         {
             var apiUser = await HttpClient.GetFromJsonAsync<User>(apiUrl);
@@ -80,7 +83,7 @@ public partial class DetailUser : ComponentBase
 
             var apiModel = new User
             {
-                Id = UserId,
+                Id = userGuid,
                 Phone = model.Phone,
                 Picture = model.Picture,
                 Email = model.Email,

@@ -49,6 +49,7 @@ namespace VillajourFrontend
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.SaveTokens = true;
+                options.SignOutScheme = CookieAuthenticationDefaults.LogoutPath;
                 options.TokenValidationParameters = new TokenValidationParameters() {
                     ValidateLifetime = true,
                 };
@@ -66,6 +67,14 @@ namespace VillajourFrontend
                         context.Response.Redirect("/");
                         return Task.CompletedTask;
                     },
+                };
+
+                options.Events.OnSignedOutCallbackRedirect += context =>
+                {
+                    context.Response.Redirect(context.Options.SignedOutRedirectUri);
+                    context.HandleResponse();
+
+                    return Task.CompletedTask;
                 };
             });
 

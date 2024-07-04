@@ -8,13 +8,13 @@ namespace VillajourFrontend.Components;
 public partial class Chatbot : ComponentBase
 {
     [Inject]
-    private HttpClient _httpClient { get; set; }
+    private HttpClient? _httpClient { get; set; }
 
     [Inject]
-    private IHttpContextAccessor _httpContext { get; set; }
+    private IHttpContextAccessor? _httpContext { get; set; }
 
     private Guid _sessionId;
-    private string _message;
+    private string? _message;
 
     private ObservableCollection<ChatMessage> Messages { get; set; } = new ObservableCollection<ChatMessage>();
 

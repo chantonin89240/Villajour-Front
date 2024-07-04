@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using VillajourFrontend.Dto;
@@ -20,12 +21,14 @@ public partial class HomeUser
     [Inject] 
     private NotificationService? NotificationService { get; set; }
 
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid userGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
+
     List<Entity.Mairie> mairies = new List<Entity.Mairie>();
     List<Entity.Mairie> filteredMairies = new List<Entity.Mairie>();
     List<Entity.Mairie> mairiesFav = new List<Entity.Mairie>();
     string searchQuery = "";
-
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
+using System.Security.Claims;
 using VillajourFrontend.Dto.Event;
 using VillajourFrontend.Entity;
 
@@ -19,10 +20,11 @@ public partial class EventMairie
     [Inject] 
     private NotificationService? NotificationService { get; set; }
 
-    protected List<EventDto> events = new List<EventDto>();
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid MairieGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid mairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    protected List<EventDto> events = new List<EventDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,7 +33,7 @@ public partial class EventMairie
 
     protected async Task LoadEvents()
     {
-        var apiUrl = $"Event/GetEventHistoByMairie/{mairieGuid}";
+        var apiUrl = $"Event/GetEventHistoByMairie/{MairieGuid}";
         try
         {
             var eventMairie = await HttpClient.GetFromJsonAsync<List<EventDto>>(apiUrl);

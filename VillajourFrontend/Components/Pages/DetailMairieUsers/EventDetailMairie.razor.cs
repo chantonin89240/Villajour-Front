@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using VillajourFrontend.Dto;
@@ -8,7 +9,10 @@ using VillajourFrontend.Dto.Event;
 namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
 
 public partial class EventDetailMairie
-{
+{    
+    [Parameter]
+    public Guid idMairie { get; set; }
+
     [Inject]
     protected HttpClient? HttpClient { get; set; }
 
@@ -21,11 +25,11 @@ public partial class EventDetailMairie
     [Inject] 
     private NotificationService? NotificationService { get; set; }
 
-    [Parameter]
-    public Guid idMairie { get; set; }
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid UserGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     protected List<EventByMairieDetailDto> eventsDetail = new List<EventByMairieDetailDto>();
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,7 +38,7 @@ public partial class EventDetailMairie
 
     protected async Task LoadEventsDetail()
     {
-        var apiUrl = $"Event/GetEventByMairieDetail/{userGuid}/{idMairie}";
+        var apiUrl = $"Event/GetEventByMairieDetail/{UserGuid}/{idMairie}";
         try
         {
             var eventMairie = await HttpClient.GetFromJsonAsync<List<EventByMairieDetailDto>>(apiUrl);
@@ -53,7 +57,7 @@ public partial class EventDetailMairie
         var apiUrl = "User/AddFavoriteContent/";
         FavoriteContentDto addFav = new FavoriteContentDto()
         {
-            UserId = userGuid,
+            UserId = UserGuid,
             AnnouncementId = null,
             EventId = idEvent,
             DocumentId = null
@@ -95,7 +99,7 @@ public partial class EventDetailMairie
         var apiUrl = "User/DeleteFavoriteContent/";
         FavoriteContentDto deleteFav = new FavoriteContentDto()
         {
-            UserId = userGuid,
+            UserId = UserGuid,
             AnnouncementId = null,
             EventId = idEvent,
             DocumentId = null

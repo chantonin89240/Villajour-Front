@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
+using System.Security.Claims;
 using VillajourFrontend.Dto.Event;
 using VillajourFrontend.Entity;
 
@@ -7,6 +8,9 @@ namespace VillajourFrontend.Components.Pages.Mairie;
 
 public partial class UpdateEventMairie : ComponentBase
 {
+    [Parameter]
+    public EventDto? Event { get; set; }
+
     [Inject]
     protected HttpClient? HttpClient { get; set; }
 
@@ -16,12 +20,11 @@ public partial class UpdateEventMairie : ComponentBase
     [Inject]
     protected NavigationManager? NavigationManager { get; set; }
 
-    [Parameter]
-    public EventDto? Event { get; set; }
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid MairieGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     protected List<EventType> eventTypeList = new List<EventType>();
-
-    protected Guid MairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {
