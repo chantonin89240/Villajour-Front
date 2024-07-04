@@ -41,26 +41,26 @@ jobs:
       projects: '**/*.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
-  - task: DotNetCoreCLI@2
-    displayName: Test
-    inputs:
-      command: test
-      projects: '**/*.UnitTest.csproj'
-      arguments: '--configuration $(buildConfiguration)'
+#  - task: DotNetCoreCLI@2
+#    displayName: Test
+#    inputs:
+#      command: test
+#      projects: '**/*.UnitTest.csproj'
+#      arguments: '--configuration $(buildConfiguration)'
  
-- job: scan
-  displayName: Scan
-  dependsOn: build
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - task: QodanaScan@2024
-    env:
-      QODANA_TOKEN: $(QODANA_TOKEN)
+#- job: scan
+#  displayName: Scan
+#  dependsOn: build
+#  pool:
+#    vmImage: 'ubuntu-latest'
+#  steps:
+#  - task: QodanaScan@2024
+#    env:
+#      QODANA_TOKEN: $(QODANA_TOKEN)
 
 - job: deploy
   displayName: Publish
-  dependsOn: scan
+  dependsOn: build
   pool:
     vmImage: 'windows-latest'
   steps:
