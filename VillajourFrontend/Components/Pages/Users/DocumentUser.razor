@@ -20,7 +20,7 @@ else if (!documentsFav.Any())
 }
 else
 {
-    <RadzenDataList Style="height:300px;overflow:auto;" WrapItems="true" AllowPaging="true" Data="@documentsFav" TItem="DocumentDto" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
+    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@documentsFav" TItem="DocumentDto" PageSize="2" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="false">
         <Template Context="Document">
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">

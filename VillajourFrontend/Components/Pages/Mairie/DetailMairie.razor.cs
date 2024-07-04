@@ -1,31 +1,30 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
+using System.Security.Claims;
 
 namespace VillajourFrontend.Components.Pages.Mairie;
 
 public partial class DetailMairie : ComponentBase
 {
     [Inject]
-    protected HttpClient HttpClient { get; set; }
+    protected HttpClient? HttpClient { get; set; }
 
     [Inject]
-    protected DialogService DialogService { get; set; }
+    protected DialogService? DialogService { get; set; }
 
     [Inject]
-    protected NavigationManager NavigationManager { get; set; }
+    protected NavigationManager? NavigationManager { get; set; }
 
     [Inject]
-    protected NotificationService NotificationService { get; set; }
+    protected NotificationService? NotificationService { get; set; }
+
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid MairieGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     protected Entity.Mairie model = new Entity.Mairie();
-
-
-    protected RadzenScheduler<Entity.Mairie> scheduler;
-    protected int UserId => 1;
-    protected Guid MairieId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected bool IsMairie => true;
-
+    protected RadzenScheduler<Entity.Mairie>? scheduler;
     protected bool NotModificationMode;
 
     protected override async Task OnInitializedAsync()
@@ -36,7 +35,7 @@ public partial class DetailMairie : ComponentBase
 
     protected async Task LoadMairie()
     {
-        var apiUrl = "Mairie/" + MairieId;
+        var apiUrl = "Mairie/" + MairieGuid;
         try
         {
             var apiMairie = await HttpClient.GetFromJsonAsync<Entity.Mairie>(apiUrl);
@@ -80,7 +79,7 @@ public partial class DetailMairie : ComponentBase
 
             var apiModel = new Entity.Mairie
             {
-                Id = MairieId,
+                Id = MairieGuid,
                 Name = model.Name,
                 Address = model.Address,
                 Phone = model.Phone,

@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using System.Text.Json;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using VillajourFrontend.Dto;
-using VillajourFrontend.Dto.Event;
 
 namespace VillajourFrontend.Components.Pages.DetailMairieUsers;
 
 public partial class HomeDetailMairie
 {
+    [Parameter]
+    public Guid idMairie { get; set; }
+
     [Inject]
     protected HttpClient? HttpClient { get; set; }
 
@@ -21,11 +24,11 @@ public partial class HomeDetailMairie
     [Inject]
     private NotificationService? NotificationService { get; set; }
 
-    [Parameter]
-    public Guid idMairie { get; set; }
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid UserGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     protected DetailMairieDto detailMairie = new DetailMairieDto();
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,7 +37,7 @@ public partial class HomeDetailMairie
 
     protected async Task LoadDetailMairie()
     {
-        var apiUrl = $"Mairie/GetDetailMairie/{userGuid}/{idMairie}";
+        var apiUrl = $"Mairie/GetDetailMairie/{UserGuid}/{idMairie}";
         try
         {
             detailMairie = await HttpClient.GetFromJsonAsync<DetailMairieDto>(apiUrl);
@@ -52,7 +55,7 @@ public partial class HomeDetailMairie
         var apiUrl = "User/AddFavoriteMairie";
         FavoriteMairieDto deleteFav = new FavoriteMairieDto()
         {
-            UserId = userGuid,
+            UserId = UserGuid,
             MairieId = idMairie
         };
 
@@ -92,7 +95,7 @@ public partial class HomeDetailMairie
         var apiUrl = "User/DeleteFavoriteMairie/";
         FavoriteMairieDto deleteFav = new FavoriteMairieDto()
         {
-            UserId = userGuid,
+            UserId = UserGuid,
             MairieId = idMairie
         };
 

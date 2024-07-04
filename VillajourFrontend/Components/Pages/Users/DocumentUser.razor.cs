@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using VillajourFrontend.Dto;
@@ -23,13 +24,14 @@ public partial class DocumentUser
     private NotificationService? NotificationService { get; set; }
 
     [Inject]
-    private IJSRuntime JS { get; set; }
+    private IJSRuntime? JS { get; set; }
+
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid userGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     protected List<DocumentDto> documentsFav = new List<DocumentDto>();
     protected List<DocumentByMairieFavoriteDto> documentsByMairieFav = new List<DocumentByMairieFavoriteDto>();
-
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid mairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {

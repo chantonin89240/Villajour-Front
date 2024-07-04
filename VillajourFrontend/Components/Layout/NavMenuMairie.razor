@@ -10,7 +10,7 @@
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
+    <nav class="flex-column navbar-nav">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="/HomeMairie" Match="NavLinkMatch.All">
                 <span class="fas fa-home icon-spacing" aria-hidden="true"></span> Accueil
@@ -40,6 +40,9 @@
             <NavLink class="nav-link" href="/DetailMairie" Match="NavLinkMatch.All">
                 <span class="fas fa-user icon-spacing" aria-hidden="true"></span> Profil
             </NavLink>
+        </div>
+        <div class="nav-item px-3" style="margin-top: 5em;">
+            <RadzenButton Text="Déconnexion" Click="@(() => LogoutMairie())" Style="width: 100%" class="rz-background-color-danger-light" />
         </div>
     </nav>
 </div>

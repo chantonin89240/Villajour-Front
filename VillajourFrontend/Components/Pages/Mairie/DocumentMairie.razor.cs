@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
+using System.Security.Claims;
 using VillajourFrontend.Dto.Document;
 using VillajourFrontend.Entity;
 
@@ -21,12 +22,13 @@ public partial class DocumentMairie
     private NotificationService? NotificationService { get; set; }
 
     [Inject]
-    private IJSRuntime JS { get; set; }
+    private IJSRuntime? JS { get; set; }
+
+    [Inject]
+    private IHttpContextAccessor? _httpContext { get; set; }
+    protected Guid MairieGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
     protected List<DocumentDto> documents = new List<DocumentDto>();
-
-    protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected Guid mairieGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,7 +37,7 @@ public partial class DocumentMairie
 
     protected async Task LoadDocuments()
     {
-        var apiUrl = $"Document/GetDocumentHistoByMairie/{mairieGuid}";
+        var apiUrl = $"Document/GetDocumentHistoByMairie/{MairieGuid}";
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentDto>>(apiUrl);

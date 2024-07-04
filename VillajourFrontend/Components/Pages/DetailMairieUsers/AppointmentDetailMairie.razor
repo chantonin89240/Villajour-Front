@@ -7,8 +7,6 @@
 
 <NavMenuDetailMairie IdMairie="@idMairie" />
 
-<h3>Disponibilités des créneaux</h3>
-
 <div class="schedule-container">
     <div class="date-header">
         <RadzenDropDown @bind-Value="selectedDay" Data="days" Change="@(async args => await OnDateChange())" />

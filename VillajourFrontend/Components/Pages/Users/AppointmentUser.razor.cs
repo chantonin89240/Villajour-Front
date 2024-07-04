@@ -1,28 +1,25 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using System.Net.Http;
-using System.Net.Http.Json;
+using System.Security.Claims;
 using VillajourFrontend.Dto.Appointement;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
 
 namespace VillajourFrontend.Components.Pages.Users
 {
     public partial class AppointmentUserBase : ComponentBase
     {
         [Inject]
-        protected HttpClient HttpClient { get; set; }
+        protected HttpClient? HttpClient { get; set; }
 
         [Inject]
-        protected DialogService DialogService { get; set; }
+        protected DialogService? DialogService { get; set; }
+
+        [Inject]
+        private IHttpContextAccessor? _httpContext { get; set; }
+        protected Guid userGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
 
         protected List<AppointmentDTO> PastAppointments { get; set; } = new List<AppointmentDTO>();
         protected List<AppointmentDTO> FutureAppointments { get; set; } = new List<AppointmentDTO>();
         protected List<AppointmentTypeDTO> AppointmentTypes { get; set; } = new List<AppointmentTypeDTO>();
-
-        protected Guid userGuid => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
         protected override async Task OnInitializedAsync()
         {

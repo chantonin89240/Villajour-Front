@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using VillajourFrontend.Entity;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using VillajourFrontend.Dto.Appointement;
 using Radzen.Blazor;
+using System.Security.Claims;
+using VillajourFrontend.Entity;
 
 namespace VillajourFrontend.Components.Pages.Mairie
 {
@@ -18,10 +14,13 @@ namespace VillajourFrontend.Components.Pages.Mairie
         [Inject]
         protected HttpClient HttpClient { get; set; }
 
+        [Inject]
+        private IHttpContextAccessor? _httpContext { get; set; }
+        protected Guid MairieGuid { get => new Guid(_httpContext?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); }
+
         protected RadzenScheduler<Appointment> scheduler;
         protected List<Appointment> appointments = new List<Appointment>();
         protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        protected Guid MairieId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
         protected override async Task OnInitializedAsync()
         {
@@ -30,7 +29,7 @@ namespace VillajourFrontend.Components.Pages.Mairie
 
         protected async Task LoadAppointments()
         {
-            var apiUrl = $"Appointments/GetAppointmentByMairie/{MairieId}";
+            var apiUrl = $"Appointments/GetAppointmentByMairie/{MairieGuid}";
             try
             {
                 var apiAppointments = await HttpClient.GetFromJsonAsync<List<Appointment>>(apiUrl);
@@ -74,7 +73,7 @@ namespace VillajourFrontend.Components.Pages.Mairie
                 StartTime = args.Start,
                 EndTime = args.End,
                 UserId = UserId,
-                MairieId = MairieId
+                MairieId = MairieGuid
             };
 
             var parameters = new Dictionary<string, object> { { "CurrentAppointment", newAppointment }, { "Title", "Nouveau Rendez-vous" } };
