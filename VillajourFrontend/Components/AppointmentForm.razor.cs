@@ -31,8 +31,8 @@ namespace VillajourFrontend.Components
         protected Appointment model = new Appointment();
         protected List<AppointmentTypeDTO> appointmentTypes = new List<AppointmentTypeDTO>();
 
-        protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        protected Guid MairieId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        protected Guid UserId => Guid.Parse("E93EE95D-2F68-4727-BD9C-E3F9F55CC8AD");
+        protected Guid MairieId => Guid.Parse("6A62E8D2-B2FD-4FEE-ACAE-0E212A220919");
 
         public bool IsMairie = false;
         public bool IsUser = false;

@@ -20,7 +20,7 @@ namespace VillajourFrontend.Components.Pages.Mairie
 
         protected RadzenScheduler<Appointment> scheduler;
         protected List<Appointment> appointments = new List<Appointment>();
-        protected Guid UserId => Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        protected Guid UserId => Guid.Parse("E93EE95D-2F68-4727-BD9C-E3F9F55CC8AD");
 
         protected override async Task OnInitializedAsync()
         {
