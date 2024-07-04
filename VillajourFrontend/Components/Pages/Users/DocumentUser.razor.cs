@@ -56,7 +56,7 @@ public partial class DocumentUser
 
     protected async Task LoadDocumentsFavMairie()
     {
-        var apiUrl = "Document/GetDocumentByMairieFavorite/3fa85f64-5717-4562-b3fc-2c963f66afa6";
+        var apiUrl = "Document/GetDocumentByMairieFavorite/" + userGuid;
         try
         {
             var documentMairie = await HttpClient.GetFromJsonAsync<List<DocumentByMairieFavoriteDto>>(apiUrl);
